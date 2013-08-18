@@ -1,0 +1,30 @@
+{
+    "Items": [
+        {
+            "Kind": "User",
+            "Id": 1,
+            "FirstName": "Administrator",
+            "LastName": "Administrator",
+            "Email": "jlara@mail.com",
+            "Login": "admin",
+            "CreateDate": "\/Date(1376542810030-0500)\/",
+            "ModifyDate": "\/Date(1376589140000-0500)\/",
+            "DeleteDate": null,
+            "IsActive": true,
+            "IsAdministrator": true,
+            "WeeklyAvailableHours": 40.0000,
+            "CurrentAllocation": 100,
+            "CurrentAvailableHours": 0.0000,
+            "AvailableFrom": null,
+            "AvailableFutureAllocation": 0,
+            "AvailableFutureHours": 0.0000,
+            "IsObserver": false,
+            "Skills": null,
+            "ActiveDirectoryName": null,
+            "Role": {
+                "Id": 1,
+                "Name": "Developer"
+            }
+        }
+    ]
+}
