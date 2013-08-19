@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.switchfly</groupId>
-    <artifactId>targetprocess-plugin</artifactId>
+    <artifactId>targetprocess-intellij-plugin</artifactId>
     <version>0.1-SNAPSHOT</version>
 
     <properties>
@@ -19,7 +19,7 @@
 
     <packaging>jar</packaging>
 
-    <name>TargetProcess Plugin</name>
+    <name>TargetProcess Intellij Plugin</name>
     <description>A TargetProcess Plugin for Intellij</description>
     <inceptionYear>2013</inceptionYear>
 

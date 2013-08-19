@@ -9,7 +9,7 @@ import com.intellij.tasks.TaskRepository;
 import com.intellij.tasks.TaskType;
 import com.switchfly.targetprocess.TargetProcessIcons;
 import com.switchfly.targetprocess.model.Assignable;
-import com.switchfly.targetprocess.model.Project;
+import com.switchfly.targetprocess.model.TPObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -64,7 +64,7 @@ public class TargetProcessTask extends Task {
 	@Nullable
 	@Override
 	public String getProject() {
-		Project project = _assignable.getProject();
+		TPObject project = _assignable.getProject();
 		return project != null ? project.getName() : "";
 	}
 
