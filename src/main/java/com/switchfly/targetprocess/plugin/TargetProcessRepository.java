@@ -20,6 +20,7 @@ import com.intellij.tasks.impl.BaseRepository;
 import com.intellij.tasks.impl.BaseRepositoryImpl;
 import com.intellij.util.NullableFunction;
 import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.xmlb.annotations.Tag;
 import com.switchfly.targetprocess.model.Assignable;
 import com.switchfly.targetprocess.model.GenericListResponse;
 import com.switchfly.targetprocess.model.User;
@@ -32,6 +33,7 @@ import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
+@Tag("TargetProcess")
 public class TargetProcessRepository extends BaseRepositoryImpl {
 
     private static final Logger log = Logger.getInstance(TargetProcessRepository.class);
@@ -41,6 +43,11 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
     private String _host;
     private String _domain;
     private int _userId = 0;
+
+    @SuppressWarnings({"UnusedDeclaration"}) //for serialization
+    public TargetProcessRepository() {
+        super();
+    }
 
     public TargetProcessRepository(BaseRepository other) {
         super(other);
@@ -101,12 +108,12 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
     @Override
     protected void configureHttpClient(HttpClient client) {
         super.configureHttpClient(client);
-        if (isUseNTLM()) {
-            client.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, Arrays.asList(AuthPolicy.NTLM));
-            AuthScope authScope = new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT);
-            Credentials credentials = new NTCredentials(getUsername(), getPassword(), getHost(), getDomain());
-            client.getState().setCredentials(authScope, credentials);
-        }
+        //  if (isUseNTLM()) {
+        client.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, Arrays.asList(AuthPolicy.NTLM));
+        AuthScope authScope = new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT);
+        Credentials credentials = new NTCredentials(getUsername(), getPassword(), "xxx", "CORP");
+        client.getState().setCredentials(authScope, credentials);
+        //  }
     }
 
     @Override
@@ -154,7 +161,7 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
         String bodyAsString = method.getResponseBodyAsString();
         Type type = new TypeToken<GenericListResponse<Assignable>>() {
         }.getType();
-	    GenericListResponse<Assignable> userStoriesResponse = gson.fromJson(bodyAsString, type);
+        GenericListResponse<Assignable> userStoriesResponse = gson.fromJson(bodyAsString, type);
 
         final List<Assignable> assignables = userStoriesResponse.getItems();
         getCommentsForAssignables(assignables);
@@ -212,7 +219,7 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
         String bodyAsString = method.getResponseBodyAsString();
         Type type = new TypeToken<GenericListResponse<Assignable>>() {
         }.getType();
-	    GenericListResponse<Assignable> assignableResponse = gson.fromJson(bodyAsString, type);
+        GenericListResponse<Assignable> assignableResponse = gson.fromJson(bodyAsString, type);
 
         List<Assignable> assignable = assignableResponse.getItems();
         return assignable.isEmpty() ? null : new TargetProcessTask(assignable.get(0), getUrl(), this);
@@ -233,6 +240,11 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
             _userId = userResponse.getItems().iterator().next().getId();
         }
         return _userId;
+    }
+
+    @Override
+    protected int getFeatures() {
+        return TIME_MANAGEMENT; //TODO WoOT!
     }
 
     public boolean isUseNTLM() {

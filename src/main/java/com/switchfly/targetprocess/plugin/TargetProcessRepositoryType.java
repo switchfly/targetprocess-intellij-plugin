@@ -12,32 +12,36 @@ import org.jetbrains.annotations.NotNull;
 
 public class TargetProcessRepositoryType extends BaseRepositoryType<TargetProcessRepository> {
 
-	@NotNull
-	@Override
-	public String getName() {
-		return "TargetProcess";
-	}
+    public TargetProcessRepositoryType() {
+        super();
+    }
 
-	@NotNull
-	@Override
-	public Icon getIcon() {
-		return TargetProcessIcons.Logo;
-	}
+    @NotNull
+    @Override
+    public String getName() {
+        return "TargetProcess";
+    }
 
-	@NotNull
-	@Override
-	public TaskRepositoryEditor createEditor(TargetProcessRepository repository, Project project, Consumer<TargetProcessRepository> changeListener) {
-		return new BaseRepositoryEditor<TargetProcessRepository>(project, repository, changeListener);
-	}
+    @NotNull
+    @Override
+    public Icon getIcon() {
+        return TargetProcessIcons.Logo;
+    }
 
-	@NotNull
-	@Override
-	public TaskRepository createRepository() {
-		return new TargetProcessRepository(this);
-	}
+    @NotNull
+    @Override
+    public TaskRepositoryEditor createEditor(TargetProcessRepository repository, Project project, Consumer<TargetProcessRepository> changeListener) {
+        return new BaseRepositoryEditor<TargetProcessRepository>(project, repository, changeListener);
+    }
 
-	@Override
-	public Class<TargetProcessRepository> getRepositoryClass() {
-		return TargetProcessRepository.class;
-	}
+    @NotNull
+    @Override
+    public TaskRepository createRepository() {
+        return new TargetProcessRepository(this);
+    }
+
+    @Override
+    public Class<TargetProcessRepository> getRepositoryClass() {
+        return TargetProcessRepository.class;
+    }
 }
