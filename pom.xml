@@ -24,14 +24,14 @@
     <inceptionYear>2013</inceptionYear>
 
     <scm>
-        <connection>scm:git:ssh://git@github.com:bubuntux/targetprocess-intellij-plugin.git</connection>
-        <url>git:ssh://git@github.com:bubuntux/targetprocess-intellij-plugin.git</url>
+        <connection>scm:git:ssh://git@github.com:switchfly/targetprocess-intellij-plugin.git</connection>
+        <url>git:ssh://git@github.com:switchfly/targetprocess-intellij-plugin.git</url>
     </scm>
 
     <licenses>
         <license>
             <name>The MIT License (MIT)</name>
-            <url>https://raw.github.com/bubuntux/targetprocess-intellij-plugin/master/LICENSE.txt</url>
+            <url>https://raw.github.com/switchfly/targetprocess-intellij-plugin/master/LICENSE.txt</url>
         </license>
     </licenses>
 

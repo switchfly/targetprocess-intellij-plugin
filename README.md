@@ -1,2 +1,2 @@
-TargetProcess Intellij Plugin  [![Build Status](https://travis-ci.org/bubuntux/targetprocess-intellij-plugin.png?branch=master)](https://travis-ci.org/bubuntux/targetprocess-intellij-plugin)
+TargetProcess Intellij Plugin  [![Build Status](https://travis-ci.org/switchfly/targetprocess-intellij-plugin.png?branch=master)](https://travis-ci.org/switchfly/targetprocess-intellij-plugin)
 =============
