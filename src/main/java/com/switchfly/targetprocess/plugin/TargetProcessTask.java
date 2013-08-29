@@ -45,7 +45,7 @@ public class TargetProcessTask extends Task {
 	@NotNull
 	@Override
 	public Comment[] getComments() {
-		//List<com.switchfly.targetprocess.model.Comment> comments = _assignable.getComments();
+		//List<com.switchfly.targetprocess.model.Comment> comments = _assignable.getComments(); //TODO FIX
 		return new Comment[0];
 	}
 

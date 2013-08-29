@@ -13,7 +13,6 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.tasks.Task;
 import com.intellij.tasks.TaskRepositoryType;
 import com.intellij.tasks.impl.BaseRepository;
@@ -36,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 @Tag("TargetProcess")
 public class TargetProcessRepository extends BaseRepositoryImpl {
 
-    private static final Logger log = Logger.getInstance(TargetProcessRepository.class);
+    // private static final Logger log = Logger.getInstance(TargetProcessRepository.class);
     private static final Gson gson = getGson();
     private static final String WHERE_TOKEN = "where:";
     private boolean _useNTLM;
@@ -108,12 +107,12 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
     @Override
     protected void configureHttpClient(HttpClient client) {
         super.configureHttpClient(client);
-        //  if (isUseNTLM()) {
-        client.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, Arrays.asList(AuthPolicy.NTLM));
-        AuthScope authScope = new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT);
-        Credentials credentials = new NTCredentials(getUsername(), getPassword(), "xxx", "CORP");
-        client.getState().setCredentials(authScope, credentials);
-        //  }
+        if (isUseNTLM()) {
+            client.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, Arrays.asList(AuthPolicy.NTLM));
+            AuthScope authScope = new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT);
+            Credentials credentials = new NTCredentials(getUsername(), getPassword(), getHost(), getDomain());
+            client.getState().setCredentials(authScope, credentials);
+        }
     }
 
     @Override
@@ -226,7 +225,7 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
     }
 
     @Override
-    public BaseRepository clone() {
+    public TargetProcessRepository clone() {
         return new TargetProcessRepository(this);
     }
 
@@ -244,7 +243,7 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
 
     @Override
     protected int getFeatures() {
-        return TIME_MANAGEMENT; //TODO WoOT!
+        return BASIC_HTTP_AUTHORIZATION | TIME_MANAGEMENT;
     }
 
     public boolean isUseNTLM() {

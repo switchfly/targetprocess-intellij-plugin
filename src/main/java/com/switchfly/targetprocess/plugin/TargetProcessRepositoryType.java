@@ -3,7 +3,6 @@ package com.switchfly.targetprocess.plugin;
 import javax.swing.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.tasks.TaskRepository;
-import com.intellij.tasks.config.BaseRepositoryEditor;
 import com.intellij.tasks.config.TaskRepositoryEditor;
 import com.intellij.tasks.impl.BaseRepositoryType;
 import com.intellij.util.Consumer;
@@ -31,7 +30,7 @@ public class TargetProcessRepositoryType extends BaseRepositoryType<TargetProces
     @NotNull
     @Override
     public TaskRepositoryEditor createEditor(TargetProcessRepository repository, Project project, Consumer<TargetProcessRepository> changeListener) {
-        return new BaseRepositoryEditor<TargetProcessRepository>(project, repository, changeListener);
+        return new TargetProcessRepositoryEditor(project, repository, changeListener);
     }
 
     @NotNull
