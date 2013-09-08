@@ -13,6 +13,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
+import com.intellij.tasks.LocalTask;
 import com.intellij.tasks.Task;
 import com.intellij.tasks.TaskRepositoryType;
 import com.intellij.tasks.impl.BaseRepository;
@@ -37,7 +38,7 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
 
     // private static final Logger log = Logger.getInstance(TargetProcessRepository.class);
     private static final Gson gson = getGson();
-    private static final String WHERE_TOKEN = "where:";
+    //private static final String WHERE_TOKEN = "where:";
     private boolean _useNTLM;
     private String _host;
     private String _domain;
@@ -48,6 +49,10 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
         super();
     }
 
+    public TargetProcessRepository(TaskRepositoryType type) {
+        super(type);
+    }
+
     public TargetProcessRepository(BaseRepository other) {
         super(other);
         if (other instanceof TargetProcessRepository) {
@@ -56,10 +61,6 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
             _host = o.getHost();
             _domain = o.getDomain();
         }
-    }
-
-    public TargetProcessRepository(TaskRepositoryType type) {
-        super(type);
     }
 
     private static Gson getGson() {//TODO clean
@@ -133,27 +134,16 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
     }
 
     private List<Assignable> getUserAssignable(String query, int max) throws Exception {
-        String where;
-        if (StringUtils.containsIgnoreCase(query, WHERE_TOKEN)) {
-            where = StringUtils.replace(query, WHERE_TOKEN, "").trim();
-        } else {
-            StringBuilder sb = new StringBuilder("(EntityState.Name not contains 'Done') and (EntityState.Name not contains 'Closed')");
-            if (StringUtils.isNotBlank(query)) {
-                if (StringUtils.isNumeric(query)) {
-                    sb.append(" and (Id eq ");
-                    sb.append(query);
-                    sb.append(')');
-                } else {
-                    sb.append(" and (Name contains '");
-                    sb.append(query);
-                    sb.append("')");
-                }
+        String where = null;
+        if (StringUtils.isNotBlank(query)) {
+            if (StringUtils.isNumeric(query)) {
+                where = "(Id eq " + query + ")";
+            } else {
+                where = "(Name contains '" + query + "')";
             }
-            where = sb.toString();
         }
 
         HttpMethod method = getAssignablesMethod(where, max);
-        System.out.println(method.getQueryString());
 
         execute(method);
 
@@ -198,7 +188,7 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
     private HttpMethod getAssignablesMethod(String where, int take) throws Exception {
         TargetProcessMethodBuilder builder = new TargetProcessMethodBuilder(getUrl());
         builder.append("Users/").append(getUserId()).append("/Assignables");
-        builder.setInclude("Name", "Description", "CreateDate", "ModifyDate", "EntityType", "Project");
+        builder.setInclude("Name", "Description", "CreateDate", "ModifyDate", "EntityType", "Project", "EntityState");
         builder.setWhere(where).setTake(take).setOrderByDesc("CreateDate");
         return builder.build();
     }
@@ -227,6 +217,11 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
     @Override
     public TargetProcessRepository clone() {
         return new TargetProcessRepository(this);
+    }
+
+    @Override
+    public void updateTimeSpent(LocalTask task, String timeSpent, String comment) throws Exception {
+        super.updateTimeSpent(task, timeSpent, comment); //TODO implement
     }
 
     private int getUserId() throws Exception {

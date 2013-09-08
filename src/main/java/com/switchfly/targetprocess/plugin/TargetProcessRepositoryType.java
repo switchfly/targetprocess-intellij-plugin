@@ -1,8 +1,10 @@
 package com.switchfly.targetprocess.plugin;
 
 import javax.swing.*;
+import java.util.EnumSet;
 import com.intellij.openapi.project.Project;
 import com.intellij.tasks.TaskRepository;
+import com.intellij.tasks.TaskState;
 import com.intellij.tasks.config.TaskRepositoryEditor;
 import com.intellij.tasks.impl.BaseRepositoryType;
 import com.intellij.util.Consumer;
@@ -42,5 +44,10 @@ public class TargetProcessRepositoryType extends BaseRepositoryType<TargetProces
     @Override
     public Class<TargetProcessRepository> getRepositoryClass() {
         return TargetProcessRepository.class;
+    }
+
+    @Override
+    public EnumSet<TaskState> getPossibleTaskStates() {
+        return EnumSet.of(TaskState.OPEN, TaskState.RESOLVED);
     }
 }

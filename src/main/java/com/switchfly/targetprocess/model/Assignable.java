@@ -18,6 +18,8 @@ public class Assignable extends TPObject {
 	private TPObject _entityType;
 	@SerializedName("Project")
 	private TPObject _project;
+    @SerializedName("EntityState")
+    private TPObject _state;
 
 	public List<Comment> getComments() {
 		return _comments;
@@ -42,4 +44,8 @@ public class Assignable extends TPObject {
 	public TPObject getProject() {
 		return _project;
 	}
+
+    public TPObject getState() {
+        return _state;
+    }
 }
