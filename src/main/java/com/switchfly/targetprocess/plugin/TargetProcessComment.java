@@ -1,25 +1,31 @@
 package com.switchfly.targetprocess.plugin;
 
-import java.util.Date;
 import com.intellij.tasks.Comment;
-import org.jetbrains.annotations.Nullable;
+import com.switchfly.targetprocess.model.User;
+
+import java.util.Date;
 
 public class TargetProcessComment extends Comment {
 
+    private final com.switchfly.targetprocess.model.Comment comment;
+
+    public TargetProcessComment(com.switchfly.targetprocess.model.Comment comment) {
+        this.comment = comment;
+    }
+
     @Override
     public String getText() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return comment.getDescription();
     }
 
-    @Nullable
     @Override
     public String getAuthor() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        User owner = comment.getOwner();
+        return owner.getFirstName() + ' ' + owner.getLastName();
     }
 
-    @Nullable
     @Override
     public Date getDate() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return comment.getCreateDate();
     }
 }

@@ -1,32 +1,27 @@
 package com.switchfly.targetprocess.model;
 
-import java.util.Date;
 import com.google.gson.annotations.SerializedName;
 
-public class Comment extends TPObject {
+import java.util.Date;
 
-	@SerializedName("Description")
-	private String _description;
-	@SerializedName("Owner")
-	private Owner _owner;
-	@SerializedName("CreateDate")
-	private Date _createDate;
-	@SerializedName("General")
-	private TPObject _general;
+public class Comment {
 
-	public String getDescription() {
-		return _description;
-	}
+    @SerializedName("Description")
+    private String description;
+    @SerializedName("CreateDate")
+    private Date createDate;
+    @SerializedName("Owner")
+    private User owner;
 
-	public Owner getOwner() {
-		return _owner;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public Date getCreateDate() {
-		return _createDate;
-	}
+    public Date getCreateDate() {
+        return createDate;
+    }
 
-	public TPObject getGeneral() {
-		return _general;
-	}
+    public User getOwner() {
+        return owner;
+    }
 }

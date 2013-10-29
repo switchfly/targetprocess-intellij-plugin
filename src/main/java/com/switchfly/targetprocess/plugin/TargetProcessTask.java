@@ -62,7 +62,7 @@ public class TargetProcessTask extends Task {
     @Nullable
     @Override
     public String getProject() {
-        return assignable.getProject();
+        return assignable.getProjectName();
     }
 
     @NotNull
@@ -81,7 +81,7 @@ public class TargetProcessTask extends Task {
     @NotNull
     @Override
     public TaskType getType() {
-        String entityType = assignable.getEntityType();
+        String entityType = assignable.getEntityTypeName();
         if ("UserStory".equalsIgnoreCase(entityType)) {
             return TaskType.FEATURE;
         }

@@ -1,9 +1,10 @@
 package com.switchfly.targetprocess;
 
 import com.google.gson.*;
+import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import com.switchfly.targetprocess.model.Assignable;
-import com.switchfly.targetprocess.model.GenericList;
+import com.switchfly.targetprocess.model.Comment;
 import com.switchfly.targetprocess.model.User;
 import org.apache.commons.lang.StringUtils;
 
@@ -16,12 +17,14 @@ import java.util.List;
 public class TargetProcessParser {
 
     private final Type assignableType;
+    private final Type commentType;
     private final Type userType;
     private final Gson gson;
 
     public TargetProcessParser() {
         super();
         assignableType = new TypeToken<GenericList<Assignable>>() {}.getType();
+        commentType = new TypeToken<GenericList<Comment>>() {}.getType();
         userType = new TypeToken<GenericList<User>>() {}.getType();
         gson = buildGson();
     }
@@ -44,9 +47,25 @@ public class TargetProcessParser {
         return assignableList.getItems();
     }
 
+    public List<Comment> parseComments(InputStream inputStream) {
+        GenericList<Comment> commentList = gson.fromJson(new InputStreamReader(inputStream), commentType);
+        return commentList.getItems();
+    }
+
     public User parseUser(InputStream inputStream) {
         GenericList<User> userList = gson.fromJson(new InputStreamReader(inputStream), userType);
         List<User> users = userList.getItems();
         return users.isEmpty() ? null : users.get(0);
     }
+
+    private class GenericList<T> {
+
+        @SerializedName("Items")
+        private List<T> items;
+
+        public List<T> getItems() {
+            return items;
+        }
+    }
 }
+

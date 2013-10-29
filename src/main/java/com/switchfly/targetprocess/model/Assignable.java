@@ -4,11 +4,12 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Assignable {
 
-    private final List<Comment> comments = new ArrayList<Comment>();
+    private final List<Comment> comments = new LinkedList<Comment>();
 
     @SerializedName("Id")
     private int id;
@@ -45,11 +46,11 @@ public class Assignable {
         return modifyDate;
     }
 
-    public String getProject() {
+    public String getProjectName() {
         return project.name;
     }
 
-    public String getEntityType() {
+    public String getEntityTypeName() {
         return entityType.name;
     }
 

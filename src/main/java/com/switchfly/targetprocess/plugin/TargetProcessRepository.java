@@ -11,7 +11,6 @@ import com.intellij.util.xmlb.annotations.Tag;
 import com.switchfly.targetprocess.TargetProcessParser;
 import com.switchfly.targetprocess.model.Assignable;
 import com.switchfly.targetprocess.model.Comment;
-import com.switchfly.targetprocess.model.GenericList;
 import com.switchfly.targetprocess.model.User;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
@@ -137,8 +136,6 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
         final HttpMethod commentsMethod = getCommentsMethod(sb.toString());
         execute(commentsMethod);
         final String bodyAsString = commentsMethod.getResponseBodyAsString();
-        Type type = new TypeToken<GenericList<Comment>>() {
-        }.getType();
       /*
       TODO
       final GenericList<Comment> commentsResponse = gson.fromJson(bodyAsString, type);
