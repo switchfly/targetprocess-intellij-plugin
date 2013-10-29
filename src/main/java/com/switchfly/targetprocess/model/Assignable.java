@@ -2,7 +2,6 @@ package com.switchfly.targetprocess.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,6 +51,10 @@ public class Assignable {
 
     public String getEntityTypeName() {
         return entityType.name;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
     }
 
     private class TPObject {

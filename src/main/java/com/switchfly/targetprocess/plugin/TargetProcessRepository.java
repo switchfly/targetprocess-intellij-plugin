@@ -1,6 +1,5 @@
 package com.switchfly.targetprocess.plugin;
 
-import com.google.gson.reflect.TypeToken;
 import com.intellij.tasks.Task;
 import com.intellij.tasks.TaskRepositoryType;
 import com.intellij.tasks.impl.BaseRepository;
@@ -10,7 +9,6 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.xmlb.annotations.Tag;
 import com.switchfly.targetprocess.TargetProcessParser;
 import com.switchfly.targetprocess.model.Assignable;
-import com.switchfly.targetprocess.model.Comment;
 import com.switchfly.targetprocess.model.User;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
@@ -21,9 +19,10 @@ import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Tag("TargetProcess")
 public class TargetProcessRepository extends BaseRepositoryImpl {
@@ -97,11 +96,9 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
             return Task.EMPTY_ARRAY;
         }
 
-        final String url = getUrl();
-
         List<Task> taskList = ContainerUtil.mapNotNull(assignables, new NullableFunction<Assignable, Task>() {
             public Task fun(Assignable o) {
-                return new TargetProcessTask(o, url, TargetProcessRepository.this);
+                return new TargetProcessTask(o, TargetProcessRepository.this);
             }
         });
         return taskList.toArray(new Task[taskList.size()]);
@@ -136,9 +133,6 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
         final HttpMethod commentsMethod = getCommentsMethod(sb.toString());
         execute(commentsMethod);
         final String bodyAsString = commentsMethod.getResponseBodyAsString();
-      /*
-      TODO
-      final GenericList<Comment> commentsResponse = gson.fromJson(bodyAsString, type);
 
         Map<Integer, Assignable> generalIdToAssignableMapping = new HashMap<Integer, Assignable>();
 
@@ -146,7 +140,7 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
             generalIdToAssignableMapping.put(assignable.getId(), assignable);
         }
 
-        for (com.switchfly.targetprocess.model.Comment comment : commentsResponse.getItems()) {
+        /*for (com.switchfly.targetprocess.model.Comment comment : commentsResponse.getItems()) {
             final int assignableId = comment.getGeneral().getId();
             generalIdToAssignableMapping.get(assignableId).getComments().add(comment);
         }*/
@@ -173,7 +167,7 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
         execute(method);
 
         List<Assignable> assignables = PARSER.parseAssignables(method.getResponseBodyAsStream());
-        return assignables.isEmpty() ? null : new TargetProcessTask(assignables.get(0), getUrl(), this);
+        return assignables.isEmpty() ? null : new TargetProcessTask(assignables.get(0), this);
     }
 
     @Override

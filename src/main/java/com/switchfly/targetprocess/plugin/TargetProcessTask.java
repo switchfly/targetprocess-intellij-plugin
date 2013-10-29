@@ -7,20 +7,18 @@ import com.intellij.tasks.TaskType;
 import com.switchfly.targetprocess.TargetProcessIcons;
 import com.switchfly.targetprocess.model.Assignable;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.Date;
+import java.util.List;
 
 public class TargetProcessTask extends Task {
 
     private final Assignable assignable;
-    private final String url;
     private final TargetProcessRepository taskRepository;
 
-    public TargetProcessTask(Assignable assignable, String url, TargetProcessRepository taskRepository) {
+    public TargetProcessTask(Assignable assignable, TargetProcessRepository taskRepository) {
         this.assignable = assignable;
-        this.url = url;
         this.taskRepository = taskRepository;
     }
 
@@ -44,8 +42,8 @@ public class TargetProcessTask extends Task {
     @NotNull
     @Override
     public Comment[] getComments() {
-        //List<com.switchfly.targetprocess.model.Comment> comments = assignable.getComments(); //TODO FIX
-        return new Comment[0];
+        List<com.switchfly.targetprocess.model.Comment> comments = assignable.getComments();
+        return (Comment[]) comments.toArray();
     }
 
     @Override
@@ -59,7 +57,6 @@ public class TargetProcessTask extends Task {
         return getId();
     }
 
-    @Nullable
     @Override
     public String getProject() {
         return assignable.getProjectName();
@@ -113,6 +110,6 @@ public class TargetProcessTask extends Task {
 
     @Override
     public String getIssueUrl() {
-        return url + "/RestUI/TpView.aspx?id=" + assignable.getId();
+        return taskRepository.getUrl() + "/RestUI/TpView.aspx?id=" + assignable.getId();
     }
 }
