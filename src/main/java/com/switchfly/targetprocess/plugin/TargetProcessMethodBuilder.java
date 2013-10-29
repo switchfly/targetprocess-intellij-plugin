@@ -61,7 +61,7 @@ public class TargetProcessMethodBuilder {
         for (Map.Entry<String, String> entry : _parameters.entrySet()) {
             params[index++] = new NameValuePair(entry.getKey(), entry.getValue());
         }
-        method.setQueryString(params);
+        method.setQueryString(params); //TODO ??
         return method;
     }
 }

@@ -1,0 +1,548 @@
+{
+  "Next": "http://md5.tpondemand.com/api/v1/Assignables/?format=json&take=10&skip=10",
+  "Items": [
+    {
+      "Id": 8,
+      "Name": "Android native application",
+      "Description": "\tProin a fringilla ante. Duis vitae nisl dolor&#44; id suscipit quam. Duis nec arcu eu lacus vestibulum tincidunt. Vestibulum malesuada odio in metus tempus condimentum. Maecenas nec tristique augue. Integer id elementum neque. Curabitur eget felis lectus&#44; eu tristique risus. Sed massa elit&#44; luctus at condimentum vel&#44; condimentum ac ligula. Etiam imperdiet tellus sed nibh condimentum vehicula. Nullam accumsan nisi ultricies sem viverra in vulputate risus commodo. Phasellus aliquet porta ipsum id pulvinar. Nam vulputate vulputate porttitor. Pellentesque ultrices diam et risus vehicula sit amet porttitor leo luctus. Maecenas ut nulla sit amet dolor pulvinar vehicula a id massa",
+      "StartDate": null,
+      "EndDate": null,
+      "CreateDate": "\/Date(1337176800000-0500)\/",
+      "ModifyDate": "\/Date(1337176800000-0500)\/",
+      "LastCommentDate": null,
+      "Tags": "",
+      "NumericPriority": 0.5,
+      "Effort": 16.0000,
+      "EffortCompleted": 0.0000,
+      "EffortToDo": 16.0000,
+      "TimeSpent": 0.0000,
+      "TimeRemain": 16.0000,
+      "PlannedStartDate": null,
+      "PlannedEndDate": null,
+      "EntityType": {
+        "Id": 17,
+        "Name": "Request"
+      },
+      "Owner": {
+        "Id": 2,
+        "FirstName": "Target",
+        "LastName": "Process"
+      },
+      "LastCommentedUser": null,
+      "Project": {
+        "Id": 2,
+        "Name": "Tau Product - Kanban #1"
+      },
+      "Release": null,
+      "Iteration": null,
+      "TeamIteration": null,
+      "Team": null,
+      "Priority": {
+        "Id": 21,
+        "Name": "Normal"
+      },
+      "EntityState": {
+        "Id": 34,
+        "Name": "New"
+      },
+      "CustomFields": [
+        {
+          "Name": "Risk",
+          "Type": "DropDown",
+          "Value": null
+        },
+        {
+          "Name": "Attractor",
+          "Type": "DropDown",
+          "Value": null
+        }
+      ]
+    },
+    {
+      "Id": 9,
+      "Name": "iCal integration",
+      "Description": "\tProin a fringilla ante. Duis vitae nisl dolor&#44; id suscipit quam. Duis nec arcu eu lacus vestibulum tincidunt. Vestibulum malesuada odio in metus tempus condimentum. Maecenas nec tristique augue. Integer id elementum neque. Curabitur eget felis lectus&#44; eu tristique risus. Sed massa elit&#44; luctus at condimentum vel&#44; condimentum ac ligula. Etiam imperdiet tellus sed nibh condimentum vehicula. Nullam accumsan nisi ultricies sem viverra in vulputate risus commodo. Phasellus aliquet porta ipsum id pulvinar. Nam vulputate vulputate porttitor. Pellentesque ultrices diam et risus vehicula sit amet porttitor leo luctus. Maecenas ut nulla sit amet dolor pulvinar vehicula a id massa",
+      "StartDate": null,
+      "EndDate": null,
+      "CreateDate": "\/Date(1337176800000-0500)\/",
+      "ModifyDate": "\/Date(1337176800000-0500)\/",
+      "LastCommentDate": null,
+      "Tags": "",
+      "NumericPriority": 1.0,
+      "Effort": 30.0000,
+      "EffortCompleted": 0.0000,
+      "EffortToDo": 30.0000,
+      "TimeSpent": 0.0000,
+      "TimeRemain": 30.0000,
+      "PlannedStartDate": null,
+      "PlannedEndDate": null,
+      "EntityType": {
+        "Id": 17,
+        "Name": "Request"
+      },
+      "Owner": {
+        "Id": 2,
+        "FirstName": "Target",
+        "LastName": "Process"
+      },
+      "LastCommentedUser": null,
+      "Project": {
+        "Id": 2,
+        "Name": "Tau Product - Kanban #1"
+      },
+      "Release": null,
+      "Iteration": null,
+      "TeamIteration": null,
+      "Team": null,
+      "Priority": {
+        "Id": 20,
+        "Name": "Urgent"
+      },
+      "EntityState": {
+        "Id": 34,
+        "Name": "New"
+      },
+      "CustomFields": [
+        {
+          "Name": "Risk",
+          "Type": "DropDown",
+          "Value": null
+        },
+        {
+          "Name": "Attractor",
+          "Type": "DropDown",
+          "Value": null
+        }
+      ]
+    },
+    {
+      "Id": 11,
+      "Name": "Batch add several tasks",
+      "Description": "\tProin a fringilla ante. Duis vitae nisl dolor&#44; id suscipit quam. Duis nec arcu eu lacus vestibulum tincidunt. Vestibulum malesuada odio in metus tempus condimentum. Maecenas nec tristique augue. Integer id elementum neque. Curabitur eget felis lectus&#44; eu tristique risus. Sed massa elit&#44; luctus at condimentum vel&#44; condimentum ac ligula. Etiam imperdiet tellus sed nibh condimentum vehicula. Nullam accumsan nisi ultricies sem viverra in vulputate risus commodo. Phasellus aliquet porta ipsum id pulvinar. Nam vulputate vulputate porttitor. Pellentesque ultrices diam et risus vehicula sit amet porttitor leo luctus. Maecenas ut nulla sit amet dolor pulvinar vehicula a id massa",
+      "StartDate": null,
+      "EndDate": null,
+      "CreateDate": "\/Date(1337176800000-0500)\/",
+      "ModifyDate": "\/Date(1337176800000-0500)\/",
+      "LastCommentDate": null,
+      "Tags": "",
+      "NumericPriority": 2.0,
+      "Effort": 15.0000,
+      "EffortCompleted": 0.0000,
+      "EffortToDo": 15.0000,
+      "TimeSpent": 0.0000,
+      "TimeRemain": 15.0000,
+      "PlannedStartDate": null,
+      "PlannedEndDate": null,
+      "EntityType": {
+        "Id": 17,
+        "Name": "Request"
+      },
+      "Owner": {
+        "Id": 2,
+        "FirstName": "Target",
+        "LastName": "Process"
+      },
+      "LastCommentedUser": null,
+      "Project": {
+        "Id": 2,
+        "Name": "Tau Product - Kanban #1"
+      },
+      "Release": null,
+      "Iteration": null,
+      "TeamIteration": null,
+      "Team": null,
+      "Priority": {
+        "Id": 21,
+        "Name": "Normal"
+      },
+      "EntityState": {
+        "Id": 34,
+        "Name": "New"
+      },
+      "CustomFields": [
+        {
+          "Name": "Risk",
+          "Type": "DropDown",
+          "Value": null
+        },
+        {
+          "Name": "Attractor",
+          "Type": "DropDown",
+          "Value": null
+        }
+      ]
+    },
+    {
+      "Id": 12,
+      "Name": "Your product is overpriced",
+      "Description": "\tProin a fringilla ante. Duis vitae nisl dolor&#44; id suscipit quam. Duis nec arcu eu lacus vestibulum tincidunt. Vestibulum malesuada odio in metus tempus condimentum. Maecenas nec tristique augue. Integer id elementum neque. Curabitur eget felis lectus&#44; eu tristique risus. Sed massa elit&#44; luctus at condimentum vel&#44; condimentum ac ligula. Etiam imperdiet tellus sed nibh condimentum vehicula. Nullam accumsan nisi ultricies sem viverra in vulputate risus commodo. Phasellus aliquet porta ipsum id pulvinar. Nam vulputate vulputate porttitor. Pellentesque ultrices diam et risus vehicula sit amet porttitor leo luctus. Maecenas ut nulla sit amet dolor pulvinar vehicula a id massa",
+      "StartDate": null,
+      "EndDate": null,
+      "CreateDate": "\/Date(1337176800000-0500)\/",
+      "ModifyDate": "\/Date(1354526673000-0600)\/",
+      "LastCommentDate": null,
+      "Tags": "",
+      "NumericPriority": 2.5,
+      "Effort": 16.0000,
+      "EffortCompleted": 0.0000,
+      "EffortToDo": 16.0000,
+      "TimeSpent": 0.0000,
+      "TimeRemain": 16.0000,
+      "PlannedStartDate": null,
+      "PlannedEndDate": null,
+      "EntityType": {
+        "Id": 17,
+        "Name": "Request"
+      },
+      "Owner": {
+        "Id": 2,
+        "FirstName": "Target",
+        "LastName": "Process"
+      },
+      "LastCommentedUser": null,
+      "Project": {
+        "Id": 2,
+        "Name": "Tau Product - Kanban #1"
+      },
+      "Release": null,
+      "Iteration": null,
+      "TeamIteration": null,
+      "Team": null,
+      "Priority": {
+        "Id": 20,
+        "Name": "Urgent"
+      },
+      "EntityState": {
+        "Id": 34,
+        "Name": "New"
+      },
+      "CustomFields": [
+        {
+          "Name": "Risk",
+          "Type": "DropDown",
+          "Value": null
+        },
+        {
+          "Name": "Attractor",
+          "Type": "DropDown",
+          "Value": "Delighter"
+        }
+      ]
+    },
+    {
+      "Id": 14,
+      "Name": "Support Portal integration",
+      "Description": "<div>\n\t<div>\n\t\tAs a user</div>\n\t<div>\n\t\tI want to quickly navigate between various teams and projects boards without selecting correct teams and projects all the time</div>\n\t<div>\n\t\tSo I can see what I want with less clicks</div>\n\t<div>\n\t\t </div>\n\t<div>\n\t\tGiven board Team1 Board</div>\n\t<div>\n\t\tAnd P1 and T1 are selected in context</div>\n\t<div>\n\t\tWhen I click Remember Context button</div>\n\t<div>\n\t\tThen P1 and T1 are remembered for Team1 Board</div>\n\t<div>\n\t\t </div>\n\t<div>\n\t\tWhen I navigate to Kanban Board</div>\n\t<div>\n\t\tAnd select T2 and P2 in context</div>\n\t<div>\n\t\tAnd then navigate to Team1 Board</div>\n\t<div>\n\t\tThen P1 and T1 are selected in context automatically</div>\n\t<div>\n\t\t </div>\n\t<div>\n\t\tI can reset context for the board using &#91;x&#93; icon near Remember Context button.</div>\n\t<div>\n\t\t </div>\n\t<div>\n\t\tOnly Admin or Board Owner can Remember and Reset Context</div>\n\t<div>\n\t\t </div>\n\t<div>\n\t\tTransitions between boards</div>\n</div>\n<div>\n\t </div>\n",
+      "StartDate": null,
+      "EndDate": null,
+      "CreateDate": "\/Date(1336572000000-0500)\/",
+      "ModifyDate": "\/Date(1354115443000-0600)\/",
+      "LastCommentDate": null,
+      "Tags": "",
+      "NumericPriority": 0.5,
+      "Effort": 25.0000,
+      "EffortCompleted": 0.0000,
+      "EffortToDo": 25.0000,
+      "TimeSpent": 0.0000,
+      "TimeRemain": 25.0000,
+      "PlannedStartDate": null,
+      "PlannedEndDate": null,
+      "EntityType": {
+        "Id": 9,
+        "Name": "Feature"
+      },
+      "Owner": {
+        "Id": 2,
+        "FirstName": "Target",
+        "LastName": "Process"
+      },
+      "LastCommentedUser": null,
+      "Project": {
+        "Id": 13,
+        "Name": "Tau Product Web Site - Scrum #1"
+      },
+      "Release": null,
+      "Iteration": null,
+      "TeamIteration": null,
+      "Team": null,
+      "Priority": {
+        "Id": 8,
+        "Name": "Must Have"
+      },
+      "EntityState": {
+        "Id": 57,
+        "Name": "New"
+      },
+      "CustomFields": []
+    },
+    {
+      "Id": 15,
+      "Name": "Search for support articles",
+      "Description": "<div>\n\tasdasd</div>\n",
+      "StartDate": null,
+      "EndDate": null,
+      "CreateDate": "\/Date(1336572000000-0500)\/",
+      "ModifyDate": "\/Date(1354097043000-0600)\/",
+      "LastCommentDate": null,
+      "Tags": "tag",
+      "NumericPriority": 78.375,
+      "Effort": 14.0000,
+      "EffortCompleted": 0.0000,
+      "EffortToDo": 14.0000,
+      "TimeSpent": 0.0000,
+      "TimeRemain": 14.0000,
+      "PlannedStartDate": null,
+      "PlannedEndDate": null,
+      "EntityType": {
+        "Id": 4,
+        "Name": "UserStory"
+      },
+      "Owner": {
+        "Id": 2,
+        "FirstName": "Target",
+        "LastName": "Process"
+      },
+      "LastCommentedUser": null,
+      "Project": {
+        "Id": 13,
+        "Name": "Tau Product Web Site - Scrum #1"
+      },
+      "Release": null,
+      "Iteration": null,
+      "TeamIteration": null,
+      "Team": {
+        "Id": 228,
+        "Name": ".net team"
+      },
+      "Priority": {
+        "Id": 1,
+        "Name": "Must Have"
+      },
+      "EntityState": {
+        "Id": 46,
+        "Name": "Open"
+      },
+      "CustomFields": [
+        {
+          "Name": "Risk",
+          "Type": "DropDown",
+          "Value": null
+        }
+      ]
+    },
+    {
+      "Id": 16,
+      "Name": "Show top 10 support articles",
+      "Description": null,
+      "StartDate": "\/Date(1352796299000-0600)\/",
+      "EndDate": null,
+      "CreateDate": "\/Date(1336572000000-0500)\/",
+      "ModifyDate": "\/Date(1354097044000-0600)\/",
+      "LastCommentDate": null,
+      "Tags": "",
+      "NumericPriority": 78.4375,
+      "Effort": 11.0000,
+      "EffortCompleted": 0.0000,
+      "EffortToDo": 11.0000,
+      "TimeSpent": 0.0000,
+      "TimeRemain": 11.0000,
+      "PlannedStartDate": null,
+      "PlannedEndDate": null,
+      "EntityType": {
+        "Id": 4,
+        "Name": "UserStory"
+      },
+      "Owner": {
+        "Id": 2,
+        "FirstName": "Target",
+        "LastName": "Process"
+      },
+      "LastCommentedUser": null,
+      "Project": {
+        "Id": 13,
+        "Name": "Tau Product Web Site - Scrum #1"
+      },
+      "Release": null,
+      "Iteration": null,
+      "TeamIteration": null,
+      "Team": {
+        "Id": 228,
+        "Name": ".net team"
+      },
+      "Priority": {
+        "Id": 3,
+        "Name": "Good"
+      },
+      "EntityState": {
+        "Id": 47,
+        "Name": "In Progress"
+      },
+      "CustomFields": [
+        {
+          "Name": "Risk",
+          "Type": "DropDown",
+          "Value": null
+        }
+      ]
+    },
+    {
+      "Id": 18,
+      "Name": "Mobile version",
+      "Description": null,
+      "StartDate": null,
+      "EndDate": null,
+      "CreateDate": "\/Date(1336572000000-0500)\/",
+      "ModifyDate": "\/Date(1354547716000-0600)\/",
+      "LastCommentDate": null,
+      "Tags": "",
+      "NumericPriority": 40.75,
+      "Effort": 8.0000,
+      "EffortCompleted": 0.0000,
+      "EffortToDo": 8.0000,
+      "TimeSpent": 0.0000,
+      "TimeRemain": 8.0000,
+      "PlannedStartDate": null,
+      "PlannedEndDate": null,
+      "EntityType": {
+        "Id": 4,
+        "Name": "UserStory"
+      },
+      "Owner": {
+        "Id": 2,
+        "FirstName": "Target",
+        "LastName": "Process"
+      },
+      "LastCommentedUser": null,
+      "Project": {
+        "Id": 13,
+        "Name": "Tau Product Web Site - Scrum #1"
+      },
+      "Release": {
+        "Id": 282,
+        "Name": "Release #1"
+      },
+      "Iteration": null,
+      "TeamIteration": null,
+      "Team": null,
+      "Priority": {
+        "Id": 3,
+        "Name": "Good"
+      },
+      "EntityState": {
+        "Id": 46,
+        "Name": "Open"
+      },
+      "CustomFields": [
+        {
+          "Name": "Risk",
+          "Type": "DropDown",
+          "Value": null
+        }
+      ]
+    },
+    {
+      "Id": 19,
+      "Name": "Sound-friendly version",
+      "Description": null,
+      "StartDate": null,
+      "EndDate": null,
+      "CreateDate": "\/Date(1336572000000-0500)\/",
+      "ModifyDate": "\/Date(1354548176000-0600)\/",
+      "LastCommentDate": null,
+      "Tags": "",
+      "NumericPriority": 40.9375,
+      "Effort": 7.0000,
+      "EffortCompleted": 0.0000,
+      "EffortToDo": 7.0000,
+      "TimeSpent": 0.0000,
+      "TimeRemain": 7.0000,
+      "PlannedStartDate": null,
+      "PlannedEndDate": null,
+      "EntityType": {
+        "Id": 4,
+        "Name": "UserStory"
+      },
+      "Owner": {
+        "Id": 2,
+        "FirstName": "Target",
+        "LastName": "Process"
+      },
+      "LastCommentedUser": null,
+      "Project": {
+        "Id": 13,
+        "Name": "Tau Product Web Site - Scrum #1"
+      },
+      "Release": null,
+      "Iteration": null,
+      "TeamIteration": null,
+      "Team": null,
+      "Priority": {
+        "Id": 5,
+        "Name": "Nice To Have"
+      },
+      "EntityState": {
+        "Id": 46,
+        "Name": "Open"
+      },
+      "CustomFields": [
+        {
+          "Name": "Risk",
+          "Type": "DropDown",
+          "Value": null
+        }
+      ]
+    },
+    {
+      "Id": 20,
+      "Name": "Accessibility tests failing for home page",
+      "Description": null,
+      "StartDate": null,
+      "EndDate": null,
+      "CreateDate": "\/Date(1336572000000-0500)\/",
+      "ModifyDate": "\/Date(1354548198000-0600)\/",
+      "LastCommentDate": null,
+      "Tags": "tests",
+      "NumericPriority": 20.75,
+      "Effort": 2.0000,
+      "EffortCompleted": 0.0000,
+      "EffortToDo": 2.0000,
+      "TimeSpent": 0.0000,
+      "TimeRemain": 2.0000,
+      "PlannedStartDate": null,
+      "PlannedEndDate": null,
+      "EntityType": {
+        "Id": 8,
+        "Name": "Bug"
+      },
+      "Owner": {
+        "Id": 2,
+        "FirstName": "Target",
+        "LastName": "Process"
+      },
+      "LastCommentedUser": null,
+      "Project": {
+        "Id": 13,
+        "Name": "Tau Product Web Site - Scrum #1"
+      },
+      "Release": {
+        "Id": 132,
+        "Name": "Release #3"
+      },
+      "Iteration": {
+        "Id": 284,
+        "Name": "Curr It"
+      },
+      "TeamIteration": null,
+      "Team": null,
+      "Priority": {
+        "Id": 6,
+        "Name": "Fix ASAP"
+      },
+      "EntityState": {
+        "Id": 53,
+        "Name": "Open"
+      },
+      "CustomFields": []
+    }
+  ]
+}

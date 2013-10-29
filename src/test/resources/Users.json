@@ -1,30 +1,31 @@
 {
-    "Items": [
-        {
-            "Kind": "User",
-            "Id": 1,
-            "FirstName": "Administrator",
-            "LastName": "Administrator",
-            "Email": "jlara@mail.com",
-            "Login": "admin",
-            "CreateDate": "\/Date(1376542810030-0500)\/",
-            "ModifyDate": "\/Date(1376589140000-0500)\/",
-            "DeleteDate": null,
-            "IsActive": true,
-            "IsAdministrator": true,
-            "WeeklyAvailableHours": 40.0000,
-            "CurrentAllocation": 100,
-            "CurrentAvailableHours": 0.0000,
-            "AvailableFrom": null,
-            "AvailableFutureAllocation": 0,
-            "AvailableFutureHours": 0.0000,
-            "IsObserver": false,
-            "Skills": null,
-            "ActiveDirectoryName": null,
-            "Role": {
-                "Id": 1,
-                "Name": "Developer"
-            }
-        }
-    ]
+  "Next": "http://md5.tpondemand.com/api/v1/Users/?format=json&take=1&skip=1",
+  "Items": [
+    {
+      "Kind": "User",
+      "Id": 15,
+      "FirstName": null,
+      "LastName": null,
+      "Email": "jenny@example.com",
+      "Login": "jenny@example.com",
+      "CreateDate": "\/Date(1354613545000-0600)\/",
+      "ModifyDate": "\/Date(1354613567000-0600)\/",
+      "DeleteDate": null,
+      "IsActive": false,
+      "IsAdministrator": false,
+      "WeeklyAvailableHours": 40.0000,
+      "CurrentAllocation": 0,
+      "CurrentAvailableHours": 40.0000,
+      "AvailableFrom": "\/Date(1354600800000-0600)\/",
+      "AvailableFutureAllocation": 100,
+      "AvailableFutureHours": 40.0000,
+      "IsObserver": false,
+      "Skills": null,
+      "ActiveDirectoryName": null,
+      "Role": {
+        "Id": 1,
+        "Name": "Developer"
+      }
+    }
+  ]
 }

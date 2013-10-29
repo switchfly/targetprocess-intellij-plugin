@@ -9,4 +9,5 @@ public abstract class TargetProcessIcons {
 	public static final Icon UserStory = IconLoader.getIcon("/images/UserStory.png");
 	public static final Icon Task = IconLoader.getIcon("/images/Task.png");
 	public static final Icon Bug = IconLoader.getIcon("/images/Bug.png");
+
 }

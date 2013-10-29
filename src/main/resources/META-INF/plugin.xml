@@ -2,16 +2,13 @@
     <id>com.switchfly.targetprocess</id>
     <name>TargetProcess</name>
     <version>1.0</version>
-    <!--<vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>-->
 
     <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <small>most HTML tags may be used</small>
+        Target Process Plugin
       ]]></description>
 
     <change-notes><![CDATA[
-      Add change notes here.<br>
-      <small>most HTML tags may be used</small>
+        1. Get tasks with comments
       ]]>
     </change-notes>
 
@@ -20,9 +17,7 @@
 
     <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
          on how to target different products -->
-    <!-- uncomment to enable plugin in all products
-    <depends>com.intellij.modules.lang</depends>
-    -->
+    <depends>com.intellij.tasks</depends>
 
     <application-components>
         <!-- Add your application components here -->
@@ -35,8 +30,6 @@
     <actions>
         <!-- Add your actions here -->
     </actions>
-
-    <depends>com.intellij.tasks</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <tasks.repositoryType implementation="com.switchfly.targetprocess.plugin.TargetProcessRepositoryType"/>

@@ -1,18 +1,16 @@
 package com.switchfly.targetprocess.plugin;
 
-import javax.swing.*;
-import java.util.Date;
 import com.intellij.tasks.Comment;
 import com.intellij.tasks.Task;
 import com.intellij.tasks.TaskRepository;
-import com.intellij.tasks.TaskState;
 import com.intellij.tasks.TaskType;
 import com.switchfly.targetprocess.TargetProcessIcons;
 import com.switchfly.targetprocess.model.Assignable;
-import com.switchfly.targetprocess.model.TPObject;
-import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
+import java.util.Date;
 
 public class TargetProcessTask extends Task {
 
@@ -50,7 +48,6 @@ public class TargetProcessTask extends Task {
         return new Comment[0];
     }
 
-    @Nullable
     @Override
     public TaskRepository getRepository() {
         return _taskRepository;
@@ -65,8 +62,7 @@ public class TargetProcessTask extends Task {
     @Nullable
     @Override
     public String getProject() {
-        TPObject project = _assignable.getProject();
-        return project != null ? project.getName() : "";
+        return _assignable.getProject();
     }
 
     @NotNull
@@ -85,7 +81,7 @@ public class TargetProcessTask extends Task {
     @NotNull
     @Override
     public TaskType getType() {
-        String entityType = _assignable.getEntityType().getName();
+        String entityType = _assignable.getEntityType();
         if ("UserStory".equalsIgnoreCase(entityType)) {
             return TaskType.FEATURE;
         }
@@ -107,22 +103,12 @@ public class TargetProcessTask extends Task {
 
     @Override
     public boolean isClosed() {
-        return getState() == TaskState.RESOLVED;
+        return false;
     }
 
     @Override
     public boolean isIssue() {
         return true;
-    }
-
-    @Nullable
-    @Override
-    public TaskState getState() {
-        String state = _assignable.getState().getName();
-        if (StringUtils.containsIgnoreCase(state, "Done") || StringUtils.containsIgnoreCase(state, "Closed")) {
-            return TaskState.RESOLVED;
-        }
-        return TaskState.OPEN;
     }
 
     @Override

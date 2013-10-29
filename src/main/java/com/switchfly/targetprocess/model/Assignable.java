@@ -1,51 +1,60 @@
 package com.switchfly.targetprocess.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import com.google.gson.annotations.SerializedName;
 
-public class Assignable extends TPObject {
+public class Assignable {
 
-	private final List<Comment> _comments = new ArrayList<Comment>();
-	@SerializedName("Description")
-	private String _description;
-	@SerializedName("CreateDate")
-	private Date _createDate;
-	@SerializedName("ModifyDate")
-	private Date _modifyDate;
-	@SerializedName("EntityType")
-	private TPObject _entityType;
-	@SerializedName("Project")
-	private TPObject _project;
-    @SerializedName("EntityState")
-    private TPObject _state;
+    private final List<Comment> comments = new ArrayList<Comment>();
 
-	public List<Comment> getComments() {
-		return _comments;
-	}
+    @SerializedName("Id")
+    private int id;
+    @SerializedName("Name")
+    private String name;
+    @SerializedName("Description")
+    private String description;
+    @SerializedName("CreateDate")
+    private Date createDate;
+    @SerializedName("ModifyDate")
+    private Date modifyDate;
+    @SerializedName("EntityType")
+    private TPObject entityType;
+    @SerializedName("Project")
+    private TPObject project;
 
-	public String getDescription() {
-		return _description;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public TPObject getEntityType() {
-		return _entityType;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public Date getCreateDate() {
-		return _createDate;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public Date getModifyDate() {
-		return _modifyDate;
-	}
+    public Date getCreateDate() {
+        return createDate;
+    }
 
-	public TPObject getProject() {
-		return _project;
-	}
+    public Date getModifyDate() {
+        return modifyDate;
+    }
 
-    public TPObject getState() {
-        return _state;
+    public String getProject() {
+        return project.name;
+    }
+
+    public String getEntityType() {
+        return entityType.name;
+    }
+
+    private class TPObject {
+        @SerializedName("Name")
+        private String name;
     }
 }

@@ -1,5 +1,6 @@
 package com.switchfly.targetprocess.plugin;
 
+import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Date;
@@ -13,7 +14,6 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
-import com.intellij.tasks.LocalTask;
 import com.intellij.tasks.Task;
 import com.intellij.tasks.TaskRepositoryType;
 import com.intellij.tasks.impl.BaseRepository;
@@ -22,7 +22,8 @@ import com.intellij.util.NullableFunction;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.xmlb.annotations.Tag;
 import com.switchfly.targetprocess.model.Assignable;
-import com.switchfly.targetprocess.model.GenericListResponse;
+import com.switchfly.targetprocess.model.Comment;
+import com.switchfly.targetprocess.model.GenericList;
 import com.switchfly.targetprocess.model.User;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
@@ -44,7 +45,6 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
     private String _domain;
     private int _userId = 0;
 
-    @SuppressWarnings({"UnusedDeclaration"}) //for serialization
     public TargetProcessRepository() {
         super();
     }
@@ -65,6 +65,7 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
 
     private static Gson getGson() {//TODO clean
         GsonBuilder gb = new GsonBuilder();
+
         gb.registerTypeAdapter(Date.class, new JsonDeserializer() {
             //private final DateFormat df = new SimpleDateFormat("yyMMddHHmmssZ");
 
@@ -97,7 +98,7 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
         return builder.build();
     }
 
-    private void execute(HttpMethod method) throws Exception {
+    void execute(HttpMethod method) throws Exception {
         HttpClient client = getHttpClient();
         int status = client.executeMethod(method);
         if (status != 200) {
@@ -133,7 +134,7 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
         return taskList.toArray(new Task[taskList.size()]);
     }
 
-    private List<Assignable> getUserAssignable(String query, int max) throws Exception {
+    List<Assignable> getUserAssignable(String query, int max) throws Exception {
         String where = null;
         if (StringUtils.isNotBlank(query)) {
             if (StringUtils.isNumeric(query)) {
@@ -147,17 +148,17 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
 
         execute(method);
 
-        String bodyAsString = method.getResponseBodyAsString();
-        Type type = new TypeToken<GenericListResponse<Assignable>>() {
-        }.getType();
-        GenericListResponse<Assignable> userStoriesResponse = gson.fromJson(bodyAsString, type);
+        InputStream stream = method.getResponseBodyAsStream();
+        /*Assignables assignables = gson.fromJson(new InputStreamReader(stream), Assignables.class);
 
-        final List<Assignable> assignables = userStoriesResponse.getItems();
-        getCommentsForAssignables(assignables);
-        return assignables;
+        final List<Assignable> assignableList = assignables.getItems();
+        */
+        return null;
+        /*getCommentsForAssignables(assignableList);
+        return assignableList;*/
     }
 
-    private void getCommentsForAssignables(List<Assignable> assignables) throws Exception {
+    void getCommentsForAssignables(List<Assignable> assignables) throws Exception {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < assignables.size(); ++i) {
@@ -169,9 +170,9 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
         final HttpMethod commentsMethod = getCommentsMethod(sb.toString());
         execute(commentsMethod);
         final String bodyAsString = commentsMethod.getResponseBodyAsString();
-        Type type = new TypeToken<GenericListResponse<com.switchfly.targetprocess.model.Comment>>() {
+        Type type = new TypeToken<GenericList<Comment>>() {
         }.getType();
-        final GenericListResponse<com.switchfly.targetprocess.model.Comment> commentsResponse = gson.fromJson(bodyAsString, type);
+        final GenericList<Comment> commentsResponse = gson.fromJson(bodyAsString, type);
 
         Map<Integer, Assignable> generalIdToAssignableMapping = new HashMap<Integer, Assignable>();
 
@@ -181,11 +182,11 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
 
         for (com.switchfly.targetprocess.model.Comment comment : commentsResponse.getItems()) {
             final int assignableId = comment.getGeneral().getId();
-            generalIdToAssignableMapping.get(assignableId).getComments().add(comment);
+            //generalIdToAssignableMapping.get(assignableId).getComments().add(comment);
         }
     }
 
-    private HttpMethod getAssignablesMethod(String where, int take) throws Exception {
+    HttpMethod getAssignablesMethod(String where, int take) throws Exception {
         TargetProcessMethodBuilder builder = new TargetProcessMethodBuilder(getUrl());
         builder.append("Users/").append(getUserId()).append("/Assignables");
         builder.setInclude("Name", "Description", "CreateDate", "ModifyDate", "EntityType", "Project", "EntityState");
@@ -206,9 +207,9 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
         execute(method);
 
         String bodyAsString = method.getResponseBodyAsString();
-        Type type = new TypeToken<GenericListResponse<Assignable>>() {
+        Type type = new TypeToken<GenericList<Assignable>>() {
         }.getType();
-        GenericListResponse<Assignable> assignableResponse = gson.fromJson(bodyAsString, type);
+        GenericList<Assignable> assignableResponse = gson.fromJson(bodyAsString, type);
 
         List<Assignable> assignable = assignableResponse.getItems();
         return assignable.isEmpty() ? null : new TargetProcessTask(assignable.get(0), getUrl(), this);
@@ -219,18 +220,13 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
         return new TargetProcessRepository(this);
     }
 
-    @Override
-    public void updateTimeSpent(LocalTask task, String timeSpent, String comment) throws Exception {
-        super.updateTimeSpent(task, timeSpent, comment); //TODO implement
-    }
-
     private int getUserId() throws Exception {
         if (_userId == 0) {
             HttpMethod method = getUserMethod();
             execute(method);
-            Type type = new TypeToken<GenericListResponse<User>>() {
+            Type type = new TypeToken<GenericList<User>>() {
             }.getType();
-            GenericListResponse<User> userResponse = gson.fromJson(method.getResponseBodyAsString(), type);
+            GenericList<User> userResponse = gson.fromJson(method.getResponseBodyAsString(), type);
             _userId = userResponse.getItems().iterator().next().getId();
         }
         return _userId;
@@ -238,7 +234,7 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
 
     @Override
     protected int getFeatures() {
-        return BASIC_HTTP_AUTHORIZATION | TIME_MANAGEMENT;
+        return BASIC_HTTP_AUTHORIZATION; //TODO TIME_MANAGEMENT;
     }
 
     public boolean isUseNTLM() {
