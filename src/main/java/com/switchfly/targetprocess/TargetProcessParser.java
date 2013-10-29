@@ -4,6 +4,7 @@ import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.switchfly.targetprocess.model.Assignable;
 import com.switchfly.targetprocess.model.GenericList;
+import com.switchfly.targetprocess.model.User;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.InputStream;
@@ -15,11 +16,13 @@ import java.util.List;
 public class TargetProcessParser {
 
     private final Type assignableType;
+    private final Type userType;
     private final Gson gson;
 
     public TargetProcessParser() {
         super();
         assignableType = new TypeToken<GenericList<Assignable>>() {}.getType();
+        userType = new TypeToken<GenericList<User>>() {}.getType();
         gson = buildGson();
     }
 
@@ -39,5 +42,11 @@ public class TargetProcessParser {
     public List<Assignable> parseAssignables(InputStream inputStream) {
         GenericList<Assignable> assignableList = gson.fromJson(new InputStreamReader(inputStream), assignableType);
         return assignableList.getItems();
+    }
+
+    public User parseUser(InputStream inputStream) {
+        GenericList<User> userList = gson.fromJson(new InputStreamReader(inputStream), userType);
+        List<User> users = userList.getItems();
+        return users.isEmpty() ? null : users.get(0);
     }
 }

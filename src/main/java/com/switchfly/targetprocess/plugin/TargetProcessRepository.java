@@ -1,18 +1,5 @@
 package com.switchfly.targetprocess.plugin;
 
-import java.io.InputStream;
-import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.intellij.tasks.Task;
 import com.intellij.tasks.TaskRepositoryType;
@@ -21,6 +8,7 @@ import com.intellij.tasks.impl.BaseRepositoryImpl;
 import com.intellij.util.NullableFunction;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.xmlb.annotations.Tag;
+import com.switchfly.targetprocess.TargetProcessParser;
 import com.switchfly.targetprocess.model.Assignable;
 import com.switchfly.targetprocess.model.Comment;
 import com.switchfly.targetprocess.model.GenericList;
@@ -34,16 +22,19 @@ import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.List;
+
 @Tag("TargetProcess")
 public class TargetProcessRepository extends BaseRepositoryImpl {
 
-    // private static final Logger log = Logger.getInstance(TargetProcessRepository.class);
-    private static final Gson gson = getGson();
-    //private static final String WHERE_TOKEN = "where:";
-    private boolean _useNTLM;
-    private String _host;
-    private String _domain;
-    private int _userId = 0;
+    private static final TargetProcessParser PARSER = new TargetProcessParser();
+
+    private boolean useNTLM;
+    private String host;
+    private String domain;
+    private int userId = 0;
 
     public TargetProcessRepository() {
         super();
@@ -57,27 +48,10 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
         super(other);
         if (other instanceof TargetProcessRepository) {
             TargetProcessRepository o = (TargetProcessRepository) other;
-            _useNTLM = o.isUseNTLM();
-            _host = o.getHost();
-            _domain = o.getDomain();
+            useNTLM = o.isUseNTLM();
+            host = o.getHost();
+            domain = o.getDomain();
         }
-    }
-
-    private static Gson getGson() {//TODO clean
-        GsonBuilder gb = new GsonBuilder();
-
-        gb.registerTypeAdapter(Date.class, new JsonDeserializer() {
-            //private final DateFormat df = new SimpleDateFormat("yyMMddHHmmssZ");
-
-            public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                String stringDate = json.getAsJsonPrimitive().getAsString();
-                stringDate = stringDate.replace("/Date(", "");//TODO replace this \\/Date\((-?\d+)\)\\/
-                stringDate =
-                    stringDate.substring(0, stringDate.indexOf("-")); // use a dateparse function: http://md5.tpondemand.com/api/v1/UserStories/meta
-                return new Date(Long.valueOf(stringDate));
-            }
-        });
-        return gb.create();
     }
 
     @Nullable
@@ -148,14 +122,7 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
 
         execute(method);
 
-        InputStream stream = method.getResponseBodyAsStream();
-        /*Assignables assignables = gson.fromJson(new InputStreamReader(stream), Assignables.class);
-
-        final List<Assignable> assignableList = assignables.getItems();
-        */
-        return null;
-        /*getCommentsForAssignables(assignableList);
-        return assignableList;*/
+        return PARSER.parseAssignables(method.getResponseBodyAsStream());
     }
 
     void getCommentsForAssignables(List<Assignable> assignables) throws Exception {
@@ -172,7 +139,9 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
         final String bodyAsString = commentsMethod.getResponseBodyAsString();
         Type type = new TypeToken<GenericList<Comment>>() {
         }.getType();
-        final GenericList<Comment> commentsResponse = gson.fromJson(bodyAsString, type);
+      /*
+      TODO
+      final GenericList<Comment> commentsResponse = gson.fromJson(bodyAsString, type);
 
         Map<Integer, Assignable> generalIdToAssignableMapping = new HashMap<Integer, Assignable>();
 
@@ -182,8 +151,8 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
 
         for (com.switchfly.targetprocess.model.Comment comment : commentsResponse.getItems()) {
             final int assignableId = comment.getGeneral().getId();
-            //generalIdToAssignableMapping.get(assignableId).getComments().add(comment);
-        }
+            generalIdToAssignableMapping.get(assignableId).getComments().add(comment);
+        }*/
     }
 
     HttpMethod getAssignablesMethod(String where, int take) throws Exception {
@@ -206,13 +175,8 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
 
         execute(method);
 
-        String bodyAsString = method.getResponseBodyAsString();
-        Type type = new TypeToken<GenericList<Assignable>>() {
-        }.getType();
-        GenericList<Assignable> assignableResponse = gson.fromJson(bodyAsString, type);
-
-        List<Assignable> assignable = assignableResponse.getItems();
-        return assignable.isEmpty() ? null : new TargetProcessTask(assignable.get(0), getUrl(), this);
+        List<Assignable> assignables = PARSER.parseAssignables(method.getResponseBodyAsStream());
+        return assignables.isEmpty() ? null : new TargetProcessTask(assignables.get(0), getUrl(), this);
     }
 
     @Override
@@ -221,43 +185,41 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
     }
 
     private int getUserId() throws Exception {
-        if (_userId == 0) {
+        if (userId == 0) {
             HttpMethod method = getUserMethod();
             execute(method);
-            Type type = new TypeToken<GenericList<User>>() {
-            }.getType();
-            GenericList<User> userResponse = gson.fromJson(method.getResponseBodyAsString(), type);
-            _userId = userResponse.getItems().iterator().next().getId();
+            User user = PARSER.parseUser(method.getResponseBodyAsStream());
+            userId = user.getId();
         }
-        return _userId;
+        return userId;
     }
 
     @Override
     protected int getFeatures() {
-        return BASIC_HTTP_AUTHORIZATION; //TODO TIME_MANAGEMENT;
+        return BASIC_HTTP_AUTHORIZATION; //TODO | TIME_MANAGEMENT;
     }
 
     public boolean isUseNTLM() {
-        return _useNTLM;
+        return useNTLM;
     }
 
     public void setUseNTLM(boolean useNTLM) {
-        _useNTLM = useNTLM;
+        this.useNTLM = useNTLM;
     }
 
     public String getHost() {
-        return _host;
+        return host;
     }
 
     public void setHost(String host) {
-        _host = host;
+        this.host = host;
     }
 
     public String getDomain() {
-        return _domain;
+        return domain;
     }
 
     public void setDomain(String domain) {
-        _domain = domain;
+        this.domain = domain;
     }
 }

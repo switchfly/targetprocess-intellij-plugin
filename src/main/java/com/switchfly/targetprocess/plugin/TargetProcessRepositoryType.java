@@ -46,8 +46,8 @@ public class TargetProcessRepositoryType extends BaseRepositoryType<TargetProces
         return TargetProcessRepository.class;
     }
 
-    @Override
+    /*@Override
     public EnumSet<TaskState> getPossibleTaskStates() {
         return EnumSet.of(TaskState.OPEN, TaskState.RESOLVED);
-    }
+    }*/
 }

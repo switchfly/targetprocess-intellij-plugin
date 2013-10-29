@@ -1,13 +1,15 @@
 package com.switchfly.targetprocess;
 
 import com.switchfly.targetprocess.model.Assignable;
+import com.switchfly.targetprocess.model.User;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 public class TargetProcessParserTest {
 
@@ -44,5 +46,28 @@ public class TargetProcessParserTest {
         assertEquals(new Date(1354548198000L), assignable10.getModifyDate());
         assertEquals("Bug", assignable10.getEntityType());
         assertEquals("Tau Product Web Site - Scrum #1", assignable10.getProject());
+    }
+
+    @Test
+    public void testParseAssignablesEmptyResponse() {
+        List<Assignable> assignables = parser.parseAssignables(getEmptyResponse());
+        assertTrue(assignables.isEmpty());
+    }
+
+    @Test
+    public void testParseUser() {
+        User user = parser.parseUser(getClass().getResourceAsStream("/User.json"));
+        assertNotNull(user);
+        assertEquals(15, user.getId());
+    }
+
+    @Test
+    public void testParseUserEmptyResponse() {
+        User user = parser.parseUser(getEmptyResponse());
+        assertNull(user);
+    }
+
+    private InputStream getEmptyResponse() {
+        return new ByteArrayInputStream("{  \"Items\": [] }".getBytes());
     }
 }

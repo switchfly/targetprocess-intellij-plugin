@@ -14,43 +14,43 @@ import java.util.Date;
 
 public class TargetProcessTask extends Task {
 
-    private final Assignable _assignable;
-    private final String _url;
-    private final TargetProcessRepository _taskRepository;
+    private final Assignable assignable;
+    private final String url;
+    private final TargetProcessRepository taskRepository;
 
     public TargetProcessTask(Assignable assignable, String url, TargetProcessRepository taskRepository) {
-        _assignable = assignable;
-        _url = url;
-        _taskRepository = taskRepository;
+        this.assignable = assignable;
+        this.url = url;
+        this.taskRepository = taskRepository;
     }
 
     @NotNull
     @Override
     public String getId() {
-        return String.valueOf(_assignable.getId());
+        return String.valueOf(assignable.getId());
     }
 
     @NotNull
     @Override
     public String getSummary() {
-        return _assignable.getName();
+        return assignable.getName();
     }
 
     @Override
     public String getDescription() {
-        return _assignable.getDescription();
+        return assignable.getDescription();
     }
 
     @NotNull
     @Override
     public Comment[] getComments() {
-        //List<com.switchfly.targetprocess.model.Comment> comments = _assignable.getComments(); //TODO FIX
+        //List<com.switchfly.targetprocess.model.Comment> comments = assignable.getComments(); //TODO FIX
         return new Comment[0];
     }
 
     @Override
     public TaskRepository getRepository() {
-        return _taskRepository;
+        return taskRepository;
     }
 
     @NotNull
@@ -62,7 +62,7 @@ public class TargetProcessTask extends Task {
     @Nullable
     @Override
     public String getProject() {
-        return _assignable.getProject();
+        return assignable.getProject();
     }
 
     @NotNull
@@ -81,7 +81,7 @@ public class TargetProcessTask extends Task {
     @NotNull
     @Override
     public TaskType getType() {
-        String entityType = _assignable.getEntityType();
+        String entityType = assignable.getEntityType();
         if ("UserStory".equalsIgnoreCase(entityType)) {
             return TaskType.FEATURE;
         }
@@ -93,12 +93,12 @@ public class TargetProcessTask extends Task {
 
     @Override
     public Date getUpdated() {
-        return _assignable.getModifyDate();
+        return assignable.getModifyDate();
     }
 
     @Override
     public Date getCreated() {
-        return _assignable.getCreateDate();
+        return assignable.getCreateDate();
     }
 
     @Override
@@ -113,6 +113,6 @@ public class TargetProcessTask extends Task {
 
     @Override
     public String getIssueUrl() {
-        return _url + "/RestUI/TpView.aspx?id=" + _assignable.getId();
+        return url + "/RestUI/TpView.aspx?id=" + assignable.getId();
     }
 }

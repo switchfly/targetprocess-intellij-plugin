@@ -10,13 +10,13 @@ import org.apache.commons.lang.StringUtils;
 
 public class TargetProcessMethodBuilder {
 
-    private final StringBuilder _uri;
-    private final Map<String, String> _parameters;
+    private final StringBuilder uri;
+    private final Map<String, String> parameters;
 
     public TargetProcessMethodBuilder(String url) {
-        _uri = new StringBuilder(url);
-        _uri.append("/api/v1/");
-        _parameters = new HashMap<String, String>();
+        uri = new StringBuilder(url);
+        uri.append("/api/v1/");
+        parameters = new HashMap<String, String>();
     }
 
     public TargetProcessMethodBuilder append(int path) {
@@ -25,7 +25,7 @@ public class TargetProcessMethodBuilder {
 
     public TargetProcessMethodBuilder append(String path) {
         if (StringUtils.isNotBlank(path)) {
-            _uri.append(path);
+            uri.append(path);
         }
         return this;
     }
@@ -48,17 +48,17 @@ public class TargetProcessMethodBuilder {
 
     public TargetProcessMethodBuilder setParameter(String name, String value) {
         if (StringUtils.isNotBlank(name) && StringUtils.isNotBlank(value)) {
-            _parameters.put(name, value);
+            parameters.put(name, value);
         }
         return this;
     }
 
     public HttpMethod build() {
-        GetMethod method = new GetMethod(_uri.toString());
+        GetMethod method = new GetMethod(uri.toString());
         method.addRequestHeader("Content-Type", "application/json");
-        NameValuePair[] params = new NameValuePair[_parameters.size()];
+        NameValuePair[] params = new NameValuePair[parameters.size()];
         int index = 0;
-        for (Map.Entry<String, String> entry : _parameters.entrySet()) {
+        for (Map.Entry<String, String> entry : parameters.entrySet()) {
             params[index++] = new NameValuePair(entry.getKey(), entry.getValue());
         }
         method.setQueryString(params); //TODO ??
