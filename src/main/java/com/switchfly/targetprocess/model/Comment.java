@@ -1,10 +1,11 @@
 package com.switchfly.targetprocess.model;
 
+import java.util.Date;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Date;
-
 public class Comment {
+
+    public final static String[] INCLUDE = {"Description", "CreateDate", "Owner"};
 
     @SerializedName("Description")
     private String description;

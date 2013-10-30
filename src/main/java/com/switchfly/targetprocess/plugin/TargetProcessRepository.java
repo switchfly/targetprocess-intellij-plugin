@@ -1,5 +1,9 @@
 package com.switchfly.targetprocess.plugin;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import com.intellij.tasks.Task;
 import com.intellij.tasks.TaskRepositoryType;
 import com.intellij.tasks.impl.BaseRepository;
@@ -7,6 +11,7 @@ import com.intellij.tasks.impl.BaseRepositoryImpl;
 import com.intellij.util.NullableFunction;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.xmlb.annotations.Tag;
+import com.switchfly.targetprocess.TargetProcessMethodFactory;
 import com.switchfly.targetprocess.TargetProcessParser;
 import com.switchfly.targetprocess.model.Assignable;
 import com.switchfly.targetprocess.model.User;
@@ -16,18 +21,13 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.NTCredentials;
 import org.apache.commons.httpclient.auth.AuthPolicy;
 import org.apache.commons.httpclient.auth.AuthScope;
-import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Tag("TargetProcess")
 public class TargetProcessRepository extends BaseRepositoryImpl {
 
     private static final TargetProcessParser PARSER = new TargetProcessParser();
+    private static final TargetProcessMethodFactory FACTORY = new TargetProcessMethodFactory();
 
     private boolean useNTLM;
     private String host;
@@ -55,19 +55,13 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
     @Nullable
     @Override
     public CancellableConnection createCancellableConnection() {
-        HttpMethod method = getUserMethod();
+        HttpMethod method = FACTORY.getUserMethod(getUrl(), getUsername());
         return new HttpTestConnection<HttpMethod>(method) {
             @Override
             protected void doTest(HttpMethod method) throws Exception {
                 execute(myMethod);
             }
         };
-    }
-
-    private HttpMethod getUserMethod() {
-        TargetProcessMethodBuilder builder = new TargetProcessMethodBuilder(getUrl()).append("Users");
-        builder.setWhere("Login eq '" + getUsername() + "'").setOrderByDesc("CreateDate").setTake(1);
-        return builder.build();
     }
 
     void execute(HttpMethod method) throws Exception {
@@ -105,20 +99,15 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
     }
 
     List<Assignable> getUserAssignable(String query, int max) throws Exception {
-        String where = null;
-        if (StringUtils.isNotBlank(query)) {
-            if (StringUtils.isNumeric(query)) {
-                where = "(Id eq " + query + ")";
-            } else {
-                where = "(Name contains '" + query + "')";
-            }
-        }
-
-        HttpMethod method = getAssignablesMethod(where, max);
+        HttpMethod method = FACTORY.getAssignablesMethod(getUrl(), getUserId(), query, max);
 
         execute(method);
 
-        return PARSER.parseAssignables(method.getResponseBodyAsStream());
+        List<Assignable> assignables = PARSER.parseAssignables(method.getResponseBodyAsStream());
+
+        //TODO attach comments
+
+        return assignables;
     }
 
     void getCommentsForAssignables(List<Assignable> assignables) throws Exception {
@@ -130,7 +119,7 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
             }
             sb.append(assignables.get(i).getId());
         }
-        final HttpMethod commentsMethod = getCommentsMethod(sb.toString());
+        final HttpMethod commentsMethod = FACTORY.getCommentsMethod(getUrl(), sb.toString()); // TODO
         execute(commentsMethod);
         final String bodyAsString = commentsMethod.getResponseBodyAsString();
 
@@ -146,28 +135,13 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
         }*/
     }
 
-    HttpMethod getAssignablesMethod(String where, int take) throws Exception {
-        TargetProcessMethodBuilder builder = new TargetProcessMethodBuilder(getUrl());
-        builder.append("Users/").append(getUserId()).append("/Assignables");
-        builder.setInclude("Name", "Description", "CreateDate", "ModifyDate", "EntityType", "Project", "EntityState");
-        builder.setWhere(where).setTake(take).setOrderByDesc("CreateDate");
-        return builder.build();
-    }
-
-    private HttpMethod getCommentsMethod(String ids) throws Exception {
-        TargetProcessMethodBuilder builder = new TargetProcessMethodBuilder(getUrl()).append("/Comments");
-        builder.setWhere("General.Id in (" + ids + ")");
-        return builder.build();
-    }
-
+    @Nullable
     @Override
     public Task findTask(String id) throws Exception {
-        HttpMethod method = getAssignablesMethod("Id eq " + id, 1);
-
+        HttpMethod method = FACTORY.getAssignableMethod(getUrl(), id);
         execute(method);
-
-        List<Assignable> assignables = PARSER.parseAssignables(method.getResponseBodyAsStream());
-        return assignables.isEmpty() ? null : new TargetProcessTask(assignables.get(0), this);
+        Assignable assignable = PARSER.parseAssignable(method.getResponseBodyAsStream());
+        return assignable == null ? null : new TargetProcessTask(assignable, this);
     }
 
     @Override
@@ -177,7 +151,7 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
 
     private int getUserId() throws Exception {
         if (userId == 0) {
-            HttpMethod method = getUserMethod();
+            HttpMethod method = FACTORY.getUserMethod(getUrl(), getUsername());
             execute(method);
             User user = PARSER.parseUser(method.getResponseBodyAsStream());
             userId = user.getId();

@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class User {
 
+    public final static String[] INCLUDE = {"Id", "FirstName", "LastName"};
+
     @SerializedName("Id")
     private int id;
     @SerializedName("FirstName")
