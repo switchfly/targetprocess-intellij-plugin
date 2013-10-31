@@ -8,7 +8,7 @@ import com.intellij.tasks.Task;
 import com.intellij.tasks.TaskRepositoryType;
 import com.intellij.tasks.impl.BaseRepository;
 import com.intellij.tasks.impl.BaseRepositoryImpl;
-import com.intellij.util.NullableFunction;
+import com.intellij.util.NotNullFunction;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.xmlb.annotations.Tag;
 import com.switchfly.targetprocess.TargetProcessMethodFactory;
@@ -22,6 +22,7 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.NTCredentials;
 import org.apache.commons.httpclient.auth.AuthPolicy;
 import org.apache.commons.httpclient.auth.AuthScope;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Tag("TargetProcess")
@@ -91,12 +92,13 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
             return Task.EMPTY_ARRAY;
         }
 
-        List<Task> taskList = ContainerUtil.mapNotNull(assignables, new NullableFunction<Assignable, Task>() {
-            public Task fun(Assignable o) {
-                return new TargetProcessTask(o, TargetProcessRepository.this);
+        return ContainerUtil.map2Array(assignables, Task.class, new NotNullFunction<Assignable, Task>() {
+            @NotNull
+            @Override
+            public Task fun(Assignable assignable) {
+                return new TargetProcessTask(assignable, TargetProcessRepository.this);
             }
         });
-        return taskList.toArray(new Task[taskList.size()]);
     }
 
     List<Assignable> getUserAssignable(String query, int max) throws Exception {

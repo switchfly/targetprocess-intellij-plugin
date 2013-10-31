@@ -3,6 +3,8 @@ package com.switchfly.targetprocess;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import com.intellij.util.NotNullFunction;
+import com.intellij.util.containers.ContainerUtil;
 import com.switchfly.targetprocess.model.Assignable;
 import com.switchfly.targetprocess.model.Comment;
 import com.switchfly.targetprocess.model.User;
@@ -10,6 +12,7 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 public class TargetProcessMethodFactory {
 
@@ -17,99 +20,134 @@ public class TargetProcessMethodFactory {
         String where = null;
         if (StringUtils.isNotBlank(query)) {
             if (StringUtils.isNumeric(query)) {
-                where = "(Id eq " + query + ")";
+                where = "(Id eq " + query + ')';
             } else {
                 where = "(Name contains '" + query + "')";
             }
         }
-        TargetProcessMethodBuilder builder = new TargetProcessMethodBuilder(url);
-        builder.append("Users/").append(userId).append("/Assignables");
-        builder.setInclude(Assignable.INCLUDE);
-        builder.setWhere(where).setTake(take).setOrderByDesc("CreateDate");
+        MethodBuilder builder = new MethodBuilder(url).append("Users/").append(userId).append("/Assignables");
+        builder.setInclude(Assignable.INCLUDE).setTake(take).setOrderByDesc("CreateDate");
+        builder.setWhere(where);
+
         return builder.build();
     }
 
     public HttpMethod getAssignableMethod(String url, String id) throws Exception {
-        TargetProcessMethodBuilder builder = new TargetProcessMethodBuilder(url).append("Assignables");
+        MethodBuilder builder = new MethodBuilder(url).append("Assignables");
         builder.setInclude(Assignable.INCLUDE);
         builder.setWhere("(Id eq " + id + ')');
         return builder.build();
     }
 
     public HttpMethod getCommentsMethod(String url, int... assignableIds) throws Exception {
-        TargetProcessMethodBuilder builder = new TargetProcessMethodBuilder(url).append("Comments");
-        StringBuilder where = new StringBuilder("General.Id in (");
+        MethodBuilder builder = new MethodBuilder(url).append("Comments");
+        StringBuilder where = new StringBuilder("(General.Id in (");
         for (int i = 0; i < assignableIds.length; i++) {
             if (i != 0) {
                 where.append(',');
             }
             where.append(assignableIds[i]);
         }
-        where.append(')');
+        where.append("))");
         builder.setWhere(where.toString()).setInclude(Comment.INCLUDE); //TODO order?
         return builder.build();
     }
 
     public HttpMethod getUserMethod(String url, String username) {
-        TargetProcessMethodBuilder builder = new TargetProcessMethodBuilder(url).append("Users").setInclude(User.INCLUDE);
-        builder.setWhere("(Login eq '" + username + "')").setOrderByDesc("CreateDate").setTake(1);
-        return builder.build();
+        Map<String, String> parameters = new HashMap<String, String>();
+        parameters.put("orderByDesc", "CreateDate");
+        parameters.put("take", "1");
+        parameters.put("where", "(Login eq '" + username + "')");
+
+        return createMethod(url, "Users", parameters, User.INCLUDE);
     }
 
-    private class TargetProcessMethodBuilder { //TODO improve
+    private HttpMethod createMethod(@NotNull String url, @NotNull String path, @NotNull Map<String, String> parameters, @NotNull String... include) {
+        GetMethod method = new GetMethod(url);
+        method.setPath("/api/v1/" + path);
 
-        private final StringBuilder uri;
+        method.addRequestHeader("Accept", "application/json");
+
+        parameters.put("include", Arrays.toString(include));
+        NameValuePair[] params =
+            ContainerUtil.map2Array(parameters.entrySet(), NameValuePair.class, new NotNullFunction<Map.Entry<String, String>, NameValuePair>() {
+                @NotNull
+                @Override
+                public NameValuePair fun(Map.Entry<String, String> entry) {
+                    return new NameValuePair(entry.getKey(), entry.getValue());
+                }
+            });
+        method.setQueryString(params);
+
+        return method;
+    }
+
+    private class MethodBuilder {
+
+        private final String url;
+        private final StringBuilder path;
         private final Map<String, String> parameters;
 
-        private TargetProcessMethodBuilder(String url) {
-            uri = new StringBuilder(url);
-            uri.append("/api/v1/");
+        private MethodBuilder(String url) {
+            this.url = url;
+            path = new StringBuilder("/api/v1/");
             parameters = new HashMap<String, String>();
         }
 
-        private TargetProcessMethodBuilder append(int path) {
+        private MethodBuilder append(int path) {
             return append(Integer.toString(path));
         }
 
-        private TargetProcessMethodBuilder append(String path) {
+        private MethodBuilder append(String path) {
             if (StringUtils.isNotBlank(path)) {
-                uri.append(path);
+                this.path.append(path);
             }
             return this;
         }
 
-        private TargetProcessMethodBuilder setWhere(String where) {
-            return setParameter("where", where);
-        }
-
-        private TargetProcessMethodBuilder setInclude(String... fields) {
-            return setParameter("include", Arrays.toString(fields));
-        }
-
-        private TargetProcessMethodBuilder setTake(int take) {
-            return setParameter("take", Integer.toString(take));
-        }
-
-        private TargetProcessMethodBuilder setOrderByDesc(String orderByDesc) {
-            return setParameter("orderByDesc", orderByDesc);
-        }
-
-        private TargetProcessMethodBuilder setParameter(String name, String value) {
-            if (StringUtils.isNotBlank(name) && StringUtils.isNotBlank(value)) {
-                parameters.put(name, value);
+        private MethodBuilder setWhere(String where) {
+            if (StringUtils.isNotBlank(where)) { //TODO
+                parameters.put("where", where);
             }
+            return this;
+        }
+
+        private MethodBuilder setInclude(String... fields) {
+            parameters.put("include", Arrays.toString(fields));
+            return this;
+        }
+
+        private MethodBuilder setTake(int take) {
+            parameters.put("take", Integer.toString(take));
+            return this;
+        }
+
+        private MethodBuilder setTake(String take) {
+            parameters.put("take", take);
+            return this;
+        }
+
+        private MethodBuilder setOrderByDesc(String orderByDesc) {
+            parameters.put("orderByDesc", orderByDesc);
             return this;
         }
 
         private HttpMethod build() {
-            GetMethod method = new GetMethod(uri.toString());
+            GetMethod method = new GetMethod(url);
+            method.setPath(path.toString());
+
             method.addRequestHeader("Accept", "application/json");
-            NameValuePair[] params = new NameValuePair[parameters.size()];
-            int index = 0;
-            for (Map.Entry<String, String> entry : parameters.entrySet()) {
-                params[index++] = new NameValuePair(entry.getKey(), entry.getValue());
-            }
-            method.setQueryString(params); //TODO ??
+
+            NameValuePair[] params =
+                ContainerUtil.map2Array(parameters.entrySet(), NameValuePair.class, new NotNullFunction<Map.Entry<String, String>, NameValuePair>() {
+                    @NotNull
+                    @Override
+                    public NameValuePair fun(Map.Entry<String, String> entry) {
+                        return new NameValuePair(entry.getKey(), entry.getValue());
+                    }
+                });
+            method.setQueryString(params);
+
             return method;
         }
     }

@@ -98,7 +98,7 @@ public class TargetProcessMethodFactoryTest {
 
         List<String> params = Arrays.asList(StringUtils.split(uri.getQuery(), '&'));
         assertEquals(2, params.size());
-        assertTrue(params.contains("where=General.Id in (5,6,7,2)")); //TODO wrap ()
+        assertTrue(params.contains("where=(General.Id in (5,6,7,2))"));
         assertTrue(params.contains("include=" + Arrays.toString(Comment.INCLUDE)));
     }
 
