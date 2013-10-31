@@ -14,6 +14,7 @@ import com.intellij.util.xmlb.annotations.Tag;
 import com.switchfly.targetprocess.TargetProcessMethodFactory;
 import com.switchfly.targetprocess.TargetProcessParser;
 import com.switchfly.targetprocess.model.Assignable;
+import com.switchfly.targetprocess.model.Comment;
 import com.switchfly.targetprocess.model.User;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
@@ -105,34 +106,30 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
 
         List<Assignable> assignables = PARSER.parseAssignables(method.getResponseBodyAsStream());
 
-        //TODO attach comments
+        addComments(assignables);
 
         return assignables;
     }
 
-    void getCommentsForAssignables(List<Assignable> assignables) throws Exception {
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < assignables.size(); ++i) {
-            if (i > 0) {
-                sb.append(',');
-            }
-            sb.append(assignables.get(i).getId());
+    void addComments(List<Assignable> assignables) throws Exception {
+        int[] assignableIds = new int[assignables.size()];
+        for (int i = 0; i < assignables.size(); i++) {
+            assignableIds[i] = assignables.get(i).getId();
         }
-        final HttpMethod commentsMethod = FACTORY.getCommentsMethod(getUrl(), sb.toString()); // TODO
+
+        final HttpMethod commentsMethod = FACTORY.getCommentsMethod(getUrl(), assignableIds);
         execute(commentsMethod);
-        final String bodyAsString = commentsMethod.getResponseBodyAsString();
+        List<Comment> comments = PARSER.parseComments(commentsMethod.getResponseBodyAsStream());
 
-        Map<Integer, Assignable> generalIdToAssignableMapping = new HashMap<Integer, Assignable>();
-
+        Map<Integer, Assignable> assignableMap = new HashMap<Integer, Assignable>();
         for (Assignable assignable : assignables) {
-            generalIdToAssignableMapping.put(assignable.getId(), assignable);
+            assignableMap.put(assignable.getId(), assignable);
         }
 
-        /*for (com.switchfly.targetprocess.model.Comment comment : commentsResponse.getItems()) {
-            final int assignableId = comment.getGeneral().getId();
-            generalIdToAssignableMapping.get(assignableId).getComments().add(comment);
-        }*/
+        for (Comment comment : comments) {
+            final int assignableId = comment.getAssignableId();
+            assignableMap.get(assignableId).addComment(comment);
+        }
     }
 
     @Nullable
@@ -141,7 +138,11 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
         HttpMethod method = FACTORY.getAssignableMethod(getUrl(), id);
         execute(method);
         Assignable assignable = PARSER.parseAssignable(method.getResponseBodyAsStream());
-        return assignable == null ? null : new TargetProcessTask(assignable, this);
+        if (assignable == null) {
+            return null;
+        }
+        addComments(Arrays.asList(assignable));
+        return new TargetProcessTask(assignable, this);
     }
 
     @Override
@@ -154,7 +155,9 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
             HttpMethod method = FACTORY.getUserMethod(getUrl(), getUsername());
             execute(method);
             User user = PARSER.parseUser(method.getResponseBodyAsStream());
-            userId = user.getId();
+            if (user != null) {
+                userId = user.getId();
+            }
         }
         return userId;
     }

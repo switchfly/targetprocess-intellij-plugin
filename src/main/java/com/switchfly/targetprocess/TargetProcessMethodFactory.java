@@ -36,9 +36,17 @@ public class TargetProcessMethodFactory {
         return builder.build();
     }
 
-    public HttpMethod getCommentsMethod(String url, String ids) throws Exception { //TODO list?
-        TargetProcessMethodBuilder builder = new TargetProcessMethodBuilder(url).append("/Comments");
-        builder.setWhere("General.Id in (" + ids + ")").setInclude(Comment.INCLUDE);
+    public HttpMethod getCommentsMethod(String url, int... assignableIds) throws Exception {
+        TargetProcessMethodBuilder builder = new TargetProcessMethodBuilder(url).append("Comments");
+        StringBuilder where = new StringBuilder("General.Id in (");
+        for (int i = 0; i < assignableIds.length; i++) {
+            if (i != 0) {
+                where.append(',');
+            }
+            where.append(assignableIds[i]);
+        }
+        where.append(')');
+        builder.setWhere(where.toString()).setInclude(Comment.INCLUDE); //TODO order?
         return builder.build();
     }
 
@@ -48,7 +56,7 @@ public class TargetProcessMethodFactory {
         return builder.build();
     }
 
-    private class TargetProcessMethodBuilder {
+    private class TargetProcessMethodBuilder { //TODO improve
 
         private final StringBuilder uri;
         private final Map<String, String> parameters;

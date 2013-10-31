@@ -54,6 +54,10 @@ public class Assignable {
         return entityType.name;
     }
 
+    public void addComment(Comment comment) {
+        comments.add(comment);
+    }
+
     public List<Comment> getComments() {
         return comments;
     }
