@@ -1,5 +1,6 @@
 package com.switchfly.targetprocess;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import com.switchfly.targetprocess.model.Assignable;
@@ -8,7 +9,6 @@ import com.switchfly.targetprocess.model.User;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
 public class TargetProcessMethodFactory {
@@ -30,9 +30,9 @@ public class TargetProcessMethodFactory {
     }
 
     public HttpMethod getAssignableMethod(String url, String id) throws Exception {
-        TargetProcessMethodBuilder builder = new TargetProcessMethodBuilder(url).append("/Assignables");
+        TargetProcessMethodBuilder builder = new TargetProcessMethodBuilder(url).append("Assignables");
         builder.setInclude(Assignable.INCLUDE);
-        builder.setWhere("Id eq " + id);
+        builder.setWhere("(Id eq " + id + ')');
         return builder.build();
     }
 
@@ -44,7 +44,7 @@ public class TargetProcessMethodFactory {
 
     public HttpMethod getUserMethod(String url, String username) {
         TargetProcessMethodBuilder builder = new TargetProcessMethodBuilder(url).append("Users").setInclude(User.INCLUDE);
-        builder.setWhere("Login eq '" + username + "'").setOrderByDesc("CreateDate").setTake(1);
+        builder.setWhere("(Login eq '" + username + "')").setOrderByDesc("CreateDate").setTake(1);
         return builder.build();
     }
 
@@ -75,7 +75,7 @@ public class TargetProcessMethodFactory {
         }
 
         private TargetProcessMethodBuilder setInclude(String... fields) {
-            return setParameter("include", ArrayUtils.toString(fields).replace('{', '[').replace('}', ']'));//TODO improve
+            return setParameter("include", Arrays.toString(fields));
         }
 
         private TargetProcessMethodBuilder setTake(int take) {
@@ -95,7 +95,7 @@ public class TargetProcessMethodFactory {
 
         private HttpMethod build() {
             GetMethod method = new GetMethod(uri.toString());
-            method.addRequestHeader("Content-Type", "application/json");
+            method.addRequestHeader("Accept", "application/json");
             NameValuePair[] params = new NameValuePair[parameters.size()];
             int index = 0;
             for (Map.Entry<String, String> entry : parameters.entrySet()) {
