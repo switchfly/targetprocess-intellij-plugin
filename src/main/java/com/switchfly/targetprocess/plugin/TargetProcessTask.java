@@ -2,11 +2,12 @@ package com.switchfly.targetprocess.plugin;
 
 import javax.swing.*;
 import java.util.Date;
-import java.util.List;
 import com.intellij.tasks.Comment;
 import com.intellij.tasks.Task;
 import com.intellij.tasks.TaskRepository;
 import com.intellij.tasks.TaskType;
+import com.intellij.util.NotNullFunction;
+import com.intellij.util.containers.ContainerUtil;
 import com.switchfly.targetprocess.TargetProcessIcons;
 import com.switchfly.targetprocess.model.Assignable;
 import org.jetbrains.annotations.NotNull;
@@ -41,12 +42,14 @@ public class TargetProcessTask extends Task {
     @NotNull
     @Override
     public Comment[] getComments() {
-        List<com.switchfly.targetprocess.model.Comment> assignableComments = assignable.getComments(); //TODO improve
-        Comment[] comments = new Comment[assignableComments.size()];
-        for (int i = 0; i < assignableComments.size(); i++) {
-            comments[i] = new TargetProcessComment(assignableComments.get(i));
-        }
-        return comments;
+        return ContainerUtil
+            .map2Array(assignable.getComments(), Comment.class, new NotNullFunction<com.switchfly.targetprocess.model.Comment, Comment>() {
+                @NotNull
+                @Override
+                public Comment fun(com.switchfly.targetprocess.model.Comment comment) {
+                    return new TargetProcessComment(comment);
+                }
+            });
     }
 
     @Override
