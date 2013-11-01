@@ -67,7 +67,7 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
             HttpMethod method = FACTORY.getUserMethod(getUrl(), getUsername());
             execute(method);
             User user = PARSER.parseUser(method.getResponseBodyAsStream());
-            if (user != null) {
+            if (user != null) { //TODO exception?
                 userId = user.getId();
             }
         }
@@ -107,7 +107,7 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
         }
     }
 
-    @Nullable
+    @NotNull
     @Override
     public CancellableConnection createCancellableConnection() {
         HttpMethod method = FACTORY.getUserMethod(getUrl(), getUsername());
