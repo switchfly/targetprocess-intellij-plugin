@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class TargetProcessMethodFactory {
 
-    public HttpMethod getAssignablesMethod(String url, int userId, @Nullable String query, int take) throws Exception { //TODO improve
+    public HttpMethod getAssignablesMethod(String url, int userId, @Nullable String query, int take) {
         String where = null;
         if (StringUtils.isNotBlank(query)) {
             if (StringUtils.isNumeric(query)) {
@@ -32,13 +32,13 @@ public class TargetProcessMethodFactory {
         return builder.build();
     }
 
-    public HttpMethod getAssignableMethod(String url, String id) throws Exception {
+    public HttpMethod getAssignableMethod(String url, String id) {
         MethodBuilder builder = new MethodBuilder(url).append("Assignables") //
             .setWhere("Id eq " + id).setInclude(Assignable.INCLUDE);
         return builder.build();
     }
 
-    public HttpMethod getCommentsMethod(String url, int... assignableIds) throws Exception {
+    public HttpMethod getCommentsMethod(String url, int... assignableIds) {
         StringBuilder where = new StringBuilder("General.Id in (");
         for (int i = 0; i < assignableIds.length; i++) {
             if (i != 0) {
