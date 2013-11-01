@@ -28,8 +28,8 @@ import org.jetbrains.annotations.Nullable;
 @Tag("TargetProcess")
 public class TargetProcessRepository extends BaseRepositoryImpl {
 
-    private static final TargetProcessParser PARSER = new TargetProcessParser();
     private static final TargetProcessMethodFactory FACTORY = new TargetProcessMethodFactory();
+    private static final TargetProcessParser PARSER = new TargetProcessParser();
 
     private boolean useNTLM;
     private String host;
@@ -54,18 +54,6 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
         }
     }
 
-    @Nullable
-    @Override
-    public CancellableConnection createCancellableConnection() {
-        HttpMethod method = FACTORY.getUserMethod(getUrl(), getUsername());
-        return new HttpTestConnection<HttpMethod>(method) {
-            @Override
-            protected void doTest(HttpMethod method) throws Exception {
-                execute(myMethod);
-            }
-        };
-    }
-
     void execute(HttpMethod method) throws Exception {
         HttpClient client = getHttpClient();
         int status = client.executeMethod(method);
@@ -74,31 +62,16 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
         }
     }
 
-    @Override
-    protected void configureHttpClient(HttpClient client) {
-        super.configureHttpClient(client);
-        if (isUseNTLM()) {
-            client.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, Arrays.asList(AuthPolicy.NTLM));
-            AuthScope authScope = new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT);
-            Credentials credentials = new NTCredentials(getUsername(), getPassword(), getHost(), getDomain());
-            client.getState().setCredentials(authScope, credentials);
-        }
-    }
-
-    @Override
-    public Task[] getIssues(@Nullable String query, int max, long since) throws Exception {
-        List<Assignable> assignables = getUserAssignable(query, max);
-        if (assignables == null || assignables.isEmpty()) {
-            return Task.EMPTY_ARRAY;
-        }
-
-        return ContainerUtil.map2Array(assignables, Task.class, new NotNullFunction<Assignable, Task>() {
-            @NotNull
-            @Override
-            public Task fun(Assignable assignable) {
-                return new TargetProcessTask(assignable, TargetProcessRepository.this);
+    private int getUserId() throws Exception {
+        if (userId == 0) {
+            HttpMethod method = FACTORY.getUserMethod(getUrl(), getUsername());
+            execute(method);
+            User user = PARSER.parseUser(method.getResponseBodyAsStream());
+            if (user != null) {
+                userId = user.getId();
             }
-        });
+        }
+        return userId;
     }
 
     List<Assignable> getUserAssignable(String query, int max) throws Exception {
@@ -136,6 +109,45 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
 
     @Nullable
     @Override
+    public CancellableConnection createCancellableConnection() {
+        HttpMethod method = FACTORY.getUserMethod(getUrl(), getUsername());
+        return new HttpTestConnection<HttpMethod>(method) {
+            @Override
+            protected void doTest(HttpMethod method) throws Exception {
+                execute(myMethod);
+            }
+        };
+    }
+
+    @Override
+    protected void configureHttpClient(HttpClient client) {
+        super.configureHttpClient(client);
+        if (isUseNTLM()) {
+            client.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, Arrays.asList(AuthPolicy.NTLM));
+            AuthScope authScope = new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT);
+            Credentials credentials = new NTCredentials(getUsername(), getPassword(), getHost(), getDomain());
+            client.getState().setCredentials(authScope, credentials);
+        }
+    }
+
+    @Override
+    public Task[] getIssues(@Nullable String query, int max, long since) throws Exception {
+        List<Assignable> assignables = getUserAssignable(query, max);
+        if (assignables == null || assignables.isEmpty()) {
+            return Task.EMPTY_ARRAY;
+        }
+
+        return ContainerUtil.map2Array(assignables, Task.class, new NotNullFunction<Assignable, Task>() {
+            @NotNull
+            @Override
+            public Task fun(Assignable assignable) {
+                return new TargetProcessTask(assignable, TargetProcessRepository.this);
+            }
+        });
+    }
+
+    @Nullable
+    @Override
     public Task findTask(String id) throws Exception {
         HttpMethod method = FACTORY.getAssignableMethod(getUrl(), id);
         execute(method);
@@ -150,18 +162,6 @@ public class TargetProcessRepository extends BaseRepositoryImpl {
     @Override
     public TargetProcessRepository clone() {
         return new TargetProcessRepository(this);
-    }
-
-    private int getUserId() throws Exception {
-        if (userId == 0) {
-            HttpMethod method = FACTORY.getUserMethod(getUrl(), getUsername());
-            execute(method);
-            User user = PARSER.parseUser(method.getResponseBodyAsStream());
-            if (user != null) {
-                userId = user.getId();
-            }
-        }
-        return userId;
     }
 
     @Override
