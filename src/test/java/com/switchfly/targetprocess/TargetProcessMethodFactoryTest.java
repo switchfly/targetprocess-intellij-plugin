@@ -31,7 +31,7 @@ public class TargetProcessMethodFactoryTest {
         assertEquals(4, params.size());
         assertTrue(params.contains("take=6"));
         assertTrue(params.contains("orderByDesc=CreateDate"));
-        assertTrue(params.contains("where=(Name contains 'Some Magic Query')"));
+        assertTrue(params.contains("where=Name contains 'Some Magic Query'"));
         assertTrue(params.contains("include=" + Arrays.toString(Assignable.INCLUDE)));
     }
 
@@ -49,7 +49,7 @@ public class TargetProcessMethodFactoryTest {
         assertEquals(4, params.size());
         assertTrue(params.contains("take=6"));
         assertTrue(params.contains("orderByDesc=CreateDate"));
-        assertTrue(params.contains("where=(Id eq 2695)"));
+        assertTrue(params.contains("where=Id eq 2695"));
         assertTrue(params.contains("include=" + Arrays.toString(Assignable.INCLUDE)));
     }
 
@@ -82,7 +82,7 @@ public class TargetProcessMethodFactoryTest {
 
         List<String> params = Arrays.asList(StringUtils.split(uri.getQuery(), '&'));
         assertEquals(2, params.size());
-        assertTrue(params.contains("where=(Id eq 2695)"));
+        assertTrue(params.contains("where=Id eq 2695"));
         assertTrue(params.contains("include=" + Arrays.toString(Assignable.INCLUDE)));
     }
 
@@ -98,7 +98,7 @@ public class TargetProcessMethodFactoryTest {
 
         List<String> params = Arrays.asList(StringUtils.split(uri.getQuery(), '&'));
         assertEquals(2, params.size());
-        assertTrue(params.contains("where=(General.Id in (5,6,7,2))"));
+        assertTrue(params.contains("where=General.Id in (5,6,7,2)"));
         assertTrue(params.contains("include=" + Arrays.toString(Comment.INCLUDE)));
     }
 
@@ -116,7 +116,7 @@ public class TargetProcessMethodFactoryTest {
         assertEquals(4, params.size());
         assertTrue(params.contains("take=1"));
         assertTrue(params.contains("orderByDesc=CreateDate"));
-        assertTrue(params.contains("where=(Login eq 'guti.dev')"));
+        assertTrue(params.contains("where=Login eq 'guti.dev'"));
         assertTrue(params.contains("include=" + Arrays.toString(User.INCLUDE)));
     }
 }
