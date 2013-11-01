@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class Comment {
 
-    public final static String[] INCLUDE = {"Description", "CreateDate", "General", "Owner"};
+    public final static String[] FIELDS = {"Description", "CreateDate", "General", "Owner"};
 
     @SerializedName("Description")
     private String description;

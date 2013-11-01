@@ -28,13 +28,13 @@ public class TargetProcessMethodFactory {
         }
 
         MethodBuilder builder = new MethodBuilder(url).append("Users/").append(userId).append("/Assignables") //
-            .setWhere(where).setOrderByDesc("CreateDate").setTake(take).setInclude(Assignable.INCLUDE);
+            .setWhere(where).setOrderByDesc("CreateDate").setTake(take).setInclude(Assignable.FIELDS);
         return builder.build();
     }
 
     public HttpMethod getAssignableMethod(String url, String id) {
         MethodBuilder builder = new MethodBuilder(url).append("Assignables") //
-            .setWhere("Id eq " + id).setInclude(Assignable.INCLUDE);
+            .setWhere("Id eq " + id).setInclude(Assignable.FIELDS);
         return builder.build();
     }
 
@@ -49,14 +49,14 @@ public class TargetProcessMethodFactory {
         where.append(')');
 
         MethodBuilder builder = new MethodBuilder(url).append("Comments") //
-            .setWhere(where.toString()).setInclude(Comment.INCLUDE);
+            .setWhere(where.toString()).setInclude(Comment.FIELDS);
         return builder.build();
     }
 
     public HttpMethod getUserMethod(String url, String username) {
         MethodBuilder builder = new MethodBuilder(url).append("Users") //
             .setWhere("Login eq '" + username + '\'') //
-            .setOrderByDesc("CreateDate").setTake(1).setInclude(User.INCLUDE);
+            .setOrderByDesc("CreateDate").setTake(1).setInclude(User.FIELDS);
         return builder.build();
     }
 

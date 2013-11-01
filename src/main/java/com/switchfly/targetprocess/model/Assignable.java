@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class Assignable {
 
-    public final static String[] INCLUDE = {"Id", "Name", "Description", "CreateDate", "ModifyDate", "EntityType", "Project"};
+    public final static String[] FIELDS = {"Id", "Name", "Description", "CreateDate", "ModifyDate", "EntityType", "Project"};
 
     @SerializedName("Id")
     private int id;
